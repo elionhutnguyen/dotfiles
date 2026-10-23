@@ -8,14 +8,11 @@
   # Localization & Timezone
   time.timeZone = "Asia/Taipei";
   i18n.defaultLocale = "en_GB.UTF-8";
-  services.xserver.xkb.layout = "us";
+  # services.xserver.xkb.layout is redundant: console.keyMap covers the TTY, and
+  # keyboard layout for the desktop is set in the compositor (umbriel config.toml)
+  # and the greeter (desktop.nix), both to "us".
   console.keyMap = "us";
-  
-  # Ensure persistent data folder exists and has user permissions
-  systemd.tmpfiles.rules = [
-    "d /home/elio/data 0755 elio users -"
-  ];
-  
+
   # Fcitx5 IME (Bamboo + Traditional Chinese Pinyin)
   i18n.inputMethod = {
     enable = true;
