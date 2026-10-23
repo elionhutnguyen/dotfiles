@@ -27,12 +27,13 @@ in
   '';
 
   # --- NVIDIA GTX 1650 PRIME Offload ---
-  nixpkgs.config.allowUnfree = true;
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    modesetting.enable = true;
+    # Proprietary kernel modules required on this driver branch (open module is
+    # for newer GPUs) — kept explicit so intent survives driver upgrades.
     open = false;
+    modesetting.enable = true;
     nvidiaSettings = true;
     powerManagement.enable = true;
     powerManagement.finegrained = true; # PCIe Runtime D3 power management
@@ -47,14 +48,6 @@ in
   };
 
   # Auto-switch GPU profile when the power adapter changes (and at boot/resume)
-  systemd.services.gpu-switch = {
-    description = "Apply GPU power-profile based on AC/battery state";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${gpuSwitch}/bin/gpu-switch";
-    };
-  };
-
   systemd.paths.gpu-switch-start = {
     description = "Watch AC adapter state for GPU switching";
     wantedBy = [ "multi-user.target" ];
