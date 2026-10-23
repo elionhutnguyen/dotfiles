@@ -1,16 +1,19 @@
 { config, pkgs, ... }:
 
 let
-  # Smart launcher: automatically evaluates power source before running apps
-  autoGpu = pkgs.writeShellScriptBin "auto-gpu" ''
+  # GPU switch: hybrid (AMD iGPU + NVIDIA GTX 1650) on AC, integrated-only on battery.
+  # The NVIDIA driver's sleep/suspend/hibernate services conflict with sleep_suspend.target;
+  # while that target is ACTIVE the dGPU is fully powered off (battery mode), and while it is
+  # INACTIVE the dGPU can run in hybrid mode with fine-grained runtime power management.
+  gpuSwitch = pkgs.writeShellScriptBin "gpu-switch" ''
     AC_ONLINE=$(cat /sys/class/power_supply/AC0/online 2>/dev/null || cat /sys/class/power_supply/ADP1/online 2>/dev/null || echo 0)
 
     if [ "$AC_ONLINE" -eq 1 ]; then
-      # On AC: Run with NVIDIA PRIME Offload
-      exec nvidia-offload "$@"
+      systemctl stop sleep_suspend.target   # power NVIDIA back on -> hybrid mode
+      echo "AC detected: hybrid GPU enabled (run apps with nvidia-offload or DRI_PRIME=1)"
     else
-      # On Battery: Silently route to energy-efficient AMD iGPU
-      exec env DRI_PRIME=0 "$@"
+      systemctl start sleep_suspend.target  # driver suspends -> dGPU fully off, AMD iGPU only
+      echo "Battery detected: NVIDIA dGPU powered off — using integrated GPU only"
     fi
   '';
 in
@@ -43,5 +46,35 @@ in
     };
   };
 
-  environment.systemPackages = [ autoGpu ];
+  # Auto-switch GPU profile when the power adapter changes (and at boot/resume)
+  systemd.services.gpu-switch = {
+    description = "Apply GPU power-profile based on AC/battery state";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${gpuSwitch}/bin/gpu-switch";
+    };
+  };
+
+  systemd.paths.gpu-switch-start = {
+    description = "Watch AC adapter state for GPU switching";
+    wantedBy = [ "multi-user.target" ];
+    pathConfig.GlobAcceleratePatternMatch = false;
+    paths = [
+      { glob = "/sys/class/power_supply/AC0/online"; }
+      { glob = "/sys/class/power_supply/ADP1/online"; }
+    ];
+  };
+
+  # Re-apply the profile at boot, after resume, and whenever AC state changes
+  systemd.services.gpu-switch-start = {
+    description = "Set GPU profile on boot and resume";
+    after = [ "suspend.target" ];
+    wantedBy = [ "multi-user.target" "suspend.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${gpuSwitch}/bin/gpu-switch";
+    };
+  };
+
+  environment.systemPackages = [ gpuSwitch ];
 }
