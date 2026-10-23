@@ -21,10 +21,9 @@ in
   home.homeDirectory = "/home/elio";
   home.stateVersion = "26.05";
 
-  programs.bash.enable = true;
   programs.git.enable = true;
 
-  # Shell & Terminal
+  # Shell & Terminal (zsh is the only interactive shell)
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
@@ -40,13 +39,9 @@ in
   # User Applications
   home.packages = with pkgs; [
     ghostty
-    zsh
-    git
     brave
     anki
     wl-clipboard
-    grim
-    slurp
   ];
 
   # Declarative XDG Standard
