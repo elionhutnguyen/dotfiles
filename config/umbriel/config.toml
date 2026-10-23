@@ -13,11 +13,12 @@ numlock_toggle = true
 [input.touchpad]
 tap = true
 
+# Only overrides are listed here; everything else comes from Umbriel's built-in
+# defaults (workspaces 1-9, window move/focus directions, etc.).
 [keybinds]
 # Launchers & Terminals
 "Mod+Return" = { action = "spawn:ghostty", repeat = false }
 "Mod+Space"  = "spawn:noctalia msg panel-toggle launcher"
-"Mod+D"      = "spawn:noctalia msg panel-toggle launcher"
 
 # Session & Windows
 "Mod+Q"      = { action = "window-close", repeat = false }
@@ -28,47 +29,8 @@ tap = true
 "XF86AudioLowerVolume" = { action = "spawn:noctalia msg volume-down", allow_when_locked = true }
 "XF86AudioMute"        = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true, repeat = false }
 
-# Focus Navigation
-"Mod+Left"  = "window-focus-left"
-"Mod+Right" = "window-focus-right"
-"Mod+Down"  = "window-focus-down"
-"Mod+Up"    = "window-focus-up"
-"Mod+H"     = "window-focus-left"
-"Mod+L"     = "window-focus-right"
-"Mod+J"     = "window-focus-down"
-"Mod+K"     = "window-focus-up"
-
-# Window Movement
-"Mod+Shift+Left"  = "window-move-left"
-"Mod+Shift+Right" = "window-move-right"
-"Mod+Shift+Down"  = "window-move-down"
-"Mod+Shift+Up"    = "window-move-up"
-"Mod+Shift+H"     = "window-move-left"
-"Mod+Shift+L"     = "window-move-right"
-"Mod+Shift+J"     = "window-move-down"
-"Mod+Shift+K"     = "window-move-up"
+# Focus Navigation & Window Movement: provided by Umbriel's built-in defaults.
 
 # Layout
 "Mod+F" = "window-fullscreen-toggle"
 "Mod+V" = "window-floating-toggle"
-
-# Workspaces (1–9)
-"Mod+1" = "workspace-switch:1"
-"Mod+2" = "workspace-switch:2"
-"Mod+3" = "workspace-switch:3"
-"Mod+4" = "workspace-switch:4"
-"Mod+5" = "workspace-switch:5"
-"Mod+6" = "workspace-switch:6"
-"Mod+7" = "workspace-switch:7"
-"Mod+8" = "workspace-switch:8"
-"Mod+9" = "workspace-switch:9"
-
-"Mod+Shift+1" = "window-move-to-workspace:1"
-"Mod+Shift+2" = "window-move-to-workspace:2"
-"Mod+Shift+3" = "window-move-to-workspace:3"
-"Mod+Shift+4" = "window-move-to-workspace:4"
-"Mod+Shift+5" = "window-move-to-workspace:5"
-"Mod+Shift+6" = "window-move-to-workspace:6"
-"Mod+Shift+7" = "window-move-to-workspace:7"
-"Mod+Shift+8" = "window-move-to-workspace:8"
-"Mod+Shift+9" = "window-move-to-workspace:9"

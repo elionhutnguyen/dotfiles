@@ -19,26 +19,9 @@ in
   boot.kernelModules = [ "asus-nb-wmi" ];
 
   services.udev.extraRules = ''
-    # 1. 80% Battery threshold limit
+    # 80% battery charge threshold, applied on plug/resume events
     ACTION=="add", SUBSYSTEM=="power_supply", KERNEL=="BAT?", ATTR{charge_control_end_threshold}="80"
-    ACTION=="add", KERNEL=="asus-nb-wmi", RUN+="${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT*/charge_control_end_threshold'"
-
-    # 2. AUTO-SWITCH: When unplugged (Battery), put NVIDIA into deep sleep (0W)
-    SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="${pkgs.bash}/bin/bash -c 'echo auto > /sys/bus/pci/devices/0000:01:00.0/power/control'"
-
-    # 3. AUTO-SWITCH: When plugged in (AC), enable hybrid offload wake-up
-    SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="${pkgs.bash}/bin/bash -c 'echo auto > /sys/bus/pci/devices/0000:01:00.0/power/control'"
   '';
-
-  systemd.services.battery-charge-threshold = {
-    description = "Enforce 80% battery limit on ASUS TUF";
-    wantedBy = [ "multi-user.target" "post-resume.target" ];
-    after = [ "multi-user.target" "post-resume.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'for f in /sys/class/power_supply/BAT*/charge_control_end_threshold; do [ -f \"$f\" ] && echo 80 > \"$f\"; done; exit 0'";
-    };
-  };
 
   # --- NVIDIA GTX 1650 PRIME Offload ---
   nixpkgs.config.allowUnfree = true;
