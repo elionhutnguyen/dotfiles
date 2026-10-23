@@ -7,7 +7,7 @@
   ];
 
   # 1. Automatic GPU switching daemon for desktop applications
-  services.switcheroo-control.enable = true;
+  services.switcherooControl.enable = true;
 
   # 2. Umbriel Compositor & Cachix Pre-built Cache
   programs.umbriel.enable = true;
@@ -23,7 +23,7 @@
       keyboard.layout = "us";
     };
   };
-  services.accountsService.enable = true;
+  services.accounts-demon.enable = true;
 
   # 4. Audio & Bluetooth
   security.rtkit.enable = true;
