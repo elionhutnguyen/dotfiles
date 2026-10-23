@@ -35,6 +35,12 @@
     noto-fonts-cjk-serif
   ];
 
+  # Default interactive shell for all users (TTY, greeter fallback, any login
+  # without a Home Manager override). Per-user zsh *config* (oh-my-zsh,
+  # plugins, completion) stays in home.nix via programs.zsh.
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
   # System Applications
   programs.neovim = {
     enable = true;
