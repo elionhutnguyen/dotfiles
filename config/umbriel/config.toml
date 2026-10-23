@@ -15,7 +15,7 @@ tap = true
 
 [keybinds]
 # Launchers & Terminals
-"Mod+Return" = { action = "spawn:alacritty", repeat = false }
+"Mod+Return" = { action = "spawn:ghostty", repeat = false }
 "Mod+Space"  = "spawn:noctalia msg panel-toggle launcher"
 "Mod+D"      = "spawn:noctalia msg panel-toggle launcher"
 
