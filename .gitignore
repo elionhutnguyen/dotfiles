@@ -1,0 +1,11 @@
+# Home Manager backup files
+*.backup
+
+# Editor temporary/swap files
+*.swp
+*.swo
+*~
+
+# Nix and environment artifacts
+.cache/
+.direnv/

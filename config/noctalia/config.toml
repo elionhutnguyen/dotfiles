@@ -1,0 +1,10 @@
+# ==============================================================================
+# Noctalia Desktop Shell v5 Default Configuration
+# Built-in defaults handle all widgets, top bar, and Material 3 colors
+# ==============================================================================
+
+[theme]
+mode = "dark"
+
+[bar.default]
+position = "top"
