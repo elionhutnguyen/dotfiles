@@ -23,7 +23,7 @@
       keyboard.layout = "us";
     };
   };
-  services.accountsservice.enable = true;
+  services.accountsService.enable = true;
 
   # 4. Audio & Bluetooth
   security.rtkit.enable = true;
