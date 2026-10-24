@@ -4,11 +4,12 @@ let
   dotfiles = "${config.home.homeDirectory}/dotfiles/config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
 
-  # Standard XDG mapping: ~/.config/<key> -> ~/dotfiles/config/<val>
-  configs = {
-    umbriel  = "umbriel";
-    noctalia = "noctalia";
-  };
+  # List of configs to link: ~/.config/<item> -> ~/dotfiles/config/<item>
+  configs = [
+    "umbriel"
+    "noctalia"
+    "ghostty"
+  ];
 in
 {
   home.username = "elio";
@@ -16,15 +17,25 @@ in
   home.stateVersion = "26.05";
 
   programs.bash.enable = true;
-  programs.git.enable = true;
 
-  # User Applications
+  # Personal Git Configuration
+  programs.git = {
+    enable = true;
+    userName = "Elio";
+    userEmail = "your.email@example.com"; # Update with your email
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+    };
+  };
+
+  # User Applications & Wayland Utilities
   home.packages = with pkgs; [
-    brave
-    anki
-    wl-clipboard
-    grim
-    slurp
+    brave-origin
+    anki-bin
+    wl-clipboard # Wayland clipboard provider
+    grim         # Wayland screenshot tool
+    slurp        # Wayland screen area selector
   ];
 
   # Declarative XDG Standard
@@ -35,10 +46,12 @@ in
       createDirectories = true;
     };
 
-    # Dynamic loop generating out-of-store symlinks
-    configFile = builtins.mapAttrs (name: subpath: {
-      source = create_symlink "${dotfiles}/${subpath}";
-      recursive = true;
-    }) configs;
+    # Dynamic generation using builtins.listToAttrs
+    configFile = builtins.listToAttrs (map (name: {
+      inherit name;
+      value = {
+        source = create_symlink "${dotfiles}/${name}";
+      };
+    }) configs);
   };
 }
