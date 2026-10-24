@@ -1,10 +1,13 @@
-# ==============================================================================
-# Noctalia Desktop Shell v5 Default Configuration
-# Built-in defaults handle all widgets, top bar, and Material 3 colors
-# ==============================================================================
-
 [theme]
 mode = "auto"
 
-[bar.default]
-position = "top"
+[shell]
+font_family = "JetBrainsMono Nerd Font"
+ui_scale = 1.0
+active_scale = 1.0
+inactive_scale = 0.75
+
+
+# Application Launcher
+[launcher]
+terminal = "ghostty"

@@ -20,12 +20,12 @@ in
 {
   imports = [ ./hardware-configuration.nix ];
 
-  # Boot
+  # --- Boot & Kernel ---
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelModules = [ "asus-nb-wmi" ];
 
-  # Power & Battery
+  # --- Power & Battery ---
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="power_supply", KERNEL=="BAT?", ATTR{charge_control_end_threshold}="80"
     ACTION=="add", KERNEL=="asus-nb-wmi", RUN+="${setBatteryLimit}"
@@ -34,7 +34,7 @@ in
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
 
-  # Graphics & Hybrid GPU
+  # --- Graphics & Hybrid GPU ---
   nixpkgs.config.allowUnfree = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   services.switcherooControl.enable = true;
@@ -60,7 +60,7 @@ in
     };
   };
 
-  # Desktop & Display
+  # --- Desktop, Compositor & Greeter ---
   programs.umbriel.enable = true;
   programs.noctalia.enable = true;
   services.displayManager.noctalia-greeter = {
@@ -70,7 +70,7 @@ in
   services.accounts-daemon.enable = true;
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # Audio & Bluetooth
+  # --- Audio & Bluetooth ---
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -85,7 +85,7 @@ in
   };
   services.blueman.enable = true;
 
-  # Locale, Fonts & Input
+  # --- Locale, Input & Fonts ---
   time.timeZone = "Asia/Taipei";
   i18n.defaultLocale = "en_GB.UTF-8";
   i18n.supportedLocales = [
@@ -126,31 +126,35 @@ in
     };
   };
 
-  # Networking & User
+  # --- Networking & User Account ---
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
+  # System shell integration (required to add /run/current-system/sw/bin/zsh to /etc/shells)
+  programs.zsh.enable = true;
+
   users.users.elio = {
     isNormalUser = true;
+    shell = pkgs.zsh; # Set Zsh as default login shell
     extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
   };
   systemd.tmpfiles.rules = [ "d /home/elio/data 0755 elio users -" ];
 
-  # Programs & Packages
+  # --- System-Level Programs & Fallbacks ---
+  programs.firefox.enable = true;
+  programs.git.enable = true; # Available for system root / flakes
   programs.neovim = {
     enable = true;
     defaultEditor = true;
   };
-  programs.firefox.enable = true;
-  programs.git.enable = true;
 
+  # Only strictly low-level / hardware diagnostic utilities here
   environment.systemPackages = with pkgs; [
     autoGpu
-    ghostty
     pciutils
   ];
 
-  # Nix Settings
+  # --- Nix Settings ---
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     extra-substituters = [ "https://umbriel.cachix.org" ];
