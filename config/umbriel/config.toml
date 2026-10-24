@@ -2,6 +2,8 @@
 # Umbriel Wayland Compositor Configuration
 # Live reloaded on file save
 # ==============================================================================
+[output."Najing CEC Panda FPD Technology CO. ltd 0x0036 Unknown"]
+scale = 1.1
 
 [general]
 autostart = ["noctalia"]
