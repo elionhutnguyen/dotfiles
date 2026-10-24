@@ -1,11 +1,6 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  imports = [
-    inputs.umbriel.nixosModules.default
-    inputs.noctalia-greeter.nixosModules.default
-  ];
-
   # 1. Automatic GPU switching daemon for desktop applications
   services.switcherooControl.enable = true;
 
