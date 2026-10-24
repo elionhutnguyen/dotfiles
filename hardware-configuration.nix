@@ -27,6 +27,7 @@
   fileSystems."/home/elio/data" =
     { device = "/dev/disk/by-uuid/f6b9748b-f3ea-49f7-a184-b9e8d562be39";
       fsType = "ext4";
+      options = [ "nofail" ];
     };
 
   swapDevices =
