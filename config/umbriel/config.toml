@@ -1,10 +1,13 @@
 # ==============================================================================
-# Umbriel Wayland Compositor Default Configuration
+# Umbriel Wayland Compositor Configuration
 # Live reloaded on file save
 # ==============================================================================
 
 [general]
 autostart = ["noctalia"]
+
+[appearance]
+prefer_no_csd = true
 
 [input.keyboard]
 layout = "us"
@@ -12,23 +15,27 @@ numlock_toggle = true
 
 [input.touchpad]
 tap = true
+accel_profile = "flat"
+
+[input.mouse]
+accel_profile = "flat"
 
 [keybinds]
 # Launchers & Terminals
-"Mod+Return" = { action = "spawn:alacritty", repeat = false }
-"Mod+Space"  = "spawn:noctalia msg panel-toggle launcher"
-"Mod+D"      = "spawn:noctalia msg panel-toggle launcher"
+"Mod+Return" = { action = "spawn:ghostty", repeat = false }
+"Mod+Space"  = { action = "spawn:noctalia msg panel-toggle launcher", repeat = false }
 
-# Session & Windows
+# Session & Overview
 "Mod+Q"      = { action = "window-close", repeat = false }
-"Mod+Escape" = "session-quit"
+"Mod+Escape" = { action = "session-quit", repeat = false }
+"Mod+O"      = { action = "overview-toggle", repeat = false }
 
-# Default Noctalia Audio IPC Integrations
+# Audio Controls (Noctalia Shell IPC)
 "XF86AudioRaiseVolume" = { action = "spawn:noctalia msg volume-up", allow_when_locked = true }
 "XF86AudioLowerVolume" = { action = "spawn:noctalia msg volume-down", allow_when_locked = true }
 "XF86AudioMute"        = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true, repeat = false }
 
-# Focus Navigation
+# Focus Navigation (Arrows & Vim keys)
 "Mod+Left"  = "window-focus-left"
 "Mod+Right" = "window-focus-right"
 "Mod+Down"  = "window-focus-down"
@@ -38,7 +45,7 @@ tap = true
 "Mod+J"     = "window-focus-down"
 "Mod+K"     = "window-focus-up"
 
-# Window Movement
+# Window Movement (Arrows & Vim keys)
 "Mod+Shift+Left"  = "window-move-left"
 "Mod+Shift+Right" = "window-move-right"
 "Mod+Shift+Down"  = "window-move-down"
@@ -48,11 +55,11 @@ tap = true
 "Mod+Shift+J"     = "window-move-down"
 "Mod+Shift+K"     = "window-move-up"
 
-# Layout
-"Mod+F" = "window-fullscreen-toggle"
-"Mod+V" = "window-floating-toggle"
+# Window Layout & States
+"Mod+F" = { action = "window-toggle-fullscreen", repeat = false }
+"Mod+V" = { action = "window-toggle-floating", repeat = false }
 
-# Workspaces (1–9)
+# Workspaces (Switch & Move)
 "Mod+1" = "workspace-switch:1"
 "Mod+2" = "workspace-switch:2"
 "Mod+3" = "workspace-switch:3"
@@ -72,3 +79,8 @@ tap = true
 "Mod+Shift+7" = "window-move-to-workspace:7"
 "Mod+Shift+8" = "window-move-to-workspace:8"
 "Mod+Shift+9" = "window-move-to-workspace:9"
+
+# Practical Window Rules for Noctalia
+[[window_rule]]
+match.app_id = "^dev.noctalia.Noctalia$"
+default_floating = true
