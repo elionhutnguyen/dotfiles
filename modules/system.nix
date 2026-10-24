@@ -67,11 +67,11 @@
   programs.git.enable = true;
 
   # Enabled at system level
-  programs.ghostty.enable = true;
   programs.noctalia.enable = true;
 
   # Stateless CLI utilities
   environment.systemPackages = with pkgs; [
     pciutils
+    ghostty-bin
   ];
 }
