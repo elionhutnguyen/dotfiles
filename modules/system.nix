@@ -72,6 +72,6 @@
   # Stateless CLI utilities
   environment.systemPackages = with pkgs; [
     pciutils
-    ghostty-bin
+    ghostty
   ];
 }
