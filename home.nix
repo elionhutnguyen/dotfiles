@@ -21,11 +21,10 @@ in
   # Personal Git Configuration
   programs.git = {
     enable = true;
-    userName = "Elio";
-    userEmail = "your.email@example.com"; # Update with your email
-    extraConfig = {
+    settings = {
       init.defaultBranch = "main";
-      pull.rebase = true;
+      user.name = "elionhutnguyen";
+      user.email = "elio.nhutnguyen@gmail.com";
     };
   };
 
