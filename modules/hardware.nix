@@ -1,6 +1,14 @@
 { config, pkgs, ... }:
 
 let
+  # 1. Battery threshold script (Clean standalone executable to satisfy udevadm)
+  setBatteryLimit = pkgs.writeShellScript "set-battery-limit" ''
+    for f in /sys/class/power_supply/BAT*/charge_control_end_threshold; do
+      [ -f "$f" ] && echo 80 > "$f"
+    done
+  '';
+
+  # 2. Dynamic GPU switcher
   autoGpu = pkgs.writeShellScriptBin "auto-gpu" ''
     if [ $# -eq 0 ]; then
       echo "Usage: auto-gpu <command> [args...]" >&2
@@ -32,14 +40,12 @@ in
   # Apply limit when battery device or WMI module is initialized
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="power_supply", KERNEL=="BAT?", ATTR{charge_control_end_threshold}="80"
-    ACTION=="add", KERNEL=="asus-nb-wmi", RUN+="${pkgs.bash}/bin/bash -c 'for f in /sys/class/power_supply/BAT*/charge_control_end_threshold; do [ -f \"$f\" ] && echo 80 > \"$f\"; done'"
+    ACTION=="add", KERNEL=="asus-nb-wmi", RUN+="${setBatteryLimit}"
   '';
 
   # Re-apply limit upon resuming from suspend/hibernate
   powerManagement.resumeCommands = ''
-    for f in /sys/class/power_supply/BAT*/charge_control_end_threshold; do
-      [ -f "$f" ] && echo 80 > "$f"
-    done
+    ${setBatteryLimit}
   '';
 
   # --- Graphics & 32-Bit Support ---
@@ -68,5 +74,9 @@ in
     };
   };
 
-  environment.systemPackages = [ autoGpu ];
+  # System-wide packages
+  environment.systemPackages = [
+    autoGpu
+    pkgs.ghostty # Installed system-wide
+  ];
 }
