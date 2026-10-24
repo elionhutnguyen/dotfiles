@@ -5,7 +5,15 @@
   services.switcherooControl.enable = true;
 
   # 2. Umbriel Compositor & Cachix Pre-built Cache
-  programs.umbriel.enable = true;
+  programs.umbriel= {
+	enable = "true";
+	settings = {
+		general = {
+			autostart = [ "noctalia" ];
+		};
+	};
+
+  };
   nix.settings = {
     extra-substituters = [ "https://umbriel.cachix.org" ];
     extra-trusted-public-keys = [ "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw=" ];
