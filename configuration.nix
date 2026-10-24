@@ -13,7 +13,7 @@
 
   users.users.elio = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
+    extraGroups = [ "wheel" "networkmanager" ];
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
