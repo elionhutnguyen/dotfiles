@@ -61,10 +61,7 @@ in
   };
 
   # Desktop & Display
-  programs.umbriel = {
-    enable = true;
-    settings.general.autostart = [ "noctalia" ];
-  };
+  programs.umbriel.enable = true;
   programs.noctalia.enable = true;
   services.displayManager.noctalia-greeter = {
     enable = true;
