@@ -98,6 +98,7 @@ in
     enableZshIntegration = true;
   };
 
+  programs.firefox.enable = true;
   # --- Git Configuration ---
   programs.git = {
     enable = true;
@@ -134,6 +135,7 @@ in
     # High-Performance CLI Tools (Available in your shell)
     ripgrep
     fd
+    faugus-laucher
   ];
 
   # --- Declarative XDG Standard & Out-of-Store Symlinks ---

@@ -141,7 +141,6 @@ in
   systemd.tmpfiles.rules = [ "d /home/elio/data 0755 elio users -" ];
 
   # --- System-Level Programs & Fallbacks ---
-  programs.firefox.enable = true;
   programs.git.enable = true; # Available for system root / flakes
   programs.neovim = {
     enable = true;
