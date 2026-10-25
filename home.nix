@@ -135,7 +135,7 @@ in
     # High-Performance CLI Tools (Available in your shell)
     ripgrep
     fd
-    faugus-laucher
+    faugus-launcher
   ];
 
   # --- Declarative XDG Standard & Out-of-Store Symlinks ---
