@@ -14,14 +14,14 @@
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
-        ./configuration.nix
+        ./hosts/nixos
         home-manager.nixosModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             extraSpecialArgs = { inherit inputs; };
-            users.elio = import ./home.nix;
+            users.elio = import ./modules/home;
             backupFileExtension = "backup";
           };
         }

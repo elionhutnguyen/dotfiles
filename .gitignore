@@ -9,3 +9,5 @@
 # Nix and environment artifacts
 .cache/
 .direnv/
+
+hardware-configuration.nix
