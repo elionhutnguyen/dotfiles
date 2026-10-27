@@ -1,9 +1,9 @@
-{ pkgs, config, ... }:
+{ ... }:
 let
-  dotfilesRoot = "/home/elio/.dotfiles/dotfiles-src";
+  dotconfigs = "/home/elio/dotfiles/dotconfigs";
 in
 {
-  den.aspects.i18n.nixos = {
+  den.aspects.i18n.nixos = { pkgs, ... }: {
     i18n.inputMethod = {
       enable = true;
       type = "fcitx5";
@@ -11,7 +11,7 @@ in
         waylandFrontend = true;
         addons = with pkgs; [
           fcitx5-bamboo
-          fcitx5-chinese-addons
+          qt6Packages.fcitx5-chinese-addons
           fcitx5-gtk
         ];
       };
@@ -25,10 +25,9 @@ in
   };
 
   den.aspects.i18n.homeManager = { config, ... }: {
-    # Rule 3
     xdg.configFile."fcitx5/config".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesRoot}/fcitx5/config";
+      config.lib.file.mkOutOfStoreSymlink "${dotconfigs}/fcitx5/config";
     xdg.configFile."fcitx5/profile".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesRoot}/fcitx5/profile";
+      config.lib.file.mkOutOfStoreSymlink "${dotconfigs}/fcitx5/profile";
   };
 }

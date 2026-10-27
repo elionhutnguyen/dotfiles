@@ -15,12 +15,6 @@
       den.batteries.hostname
       den.batteries.primary-user
       (den.batteries.user-shell "zsh")
-      (den.batteries.unfree [
-        "nvidia-x11"
-        "nvidia-settings"
-        "onlyoffice-bin"
-        "brave-browser"
-      ])
     ];
   };
 
@@ -37,8 +31,10 @@
     fonts
     display-manager
     niri
+    noctalia
     cli
     desktop
     i18n
+    vicinae
   ];
 }

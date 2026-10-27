@@ -1,6 +1,12 @@
-{ pkgs, ... }:
+{ ... }:
 {
   den.aspects.core.nixos = {
+    
+    nixpkgs.config.allowUnfree = true;
+
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
+
     nix.settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;

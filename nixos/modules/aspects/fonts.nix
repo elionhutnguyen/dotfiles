@@ -1,13 +1,13 @@
-{ pkgs, ... }:
+{ ... }:
 {
-  den.aspects.fonts.nixos = {
+  den.aspects.fonts.nixos = { pkgs, ... }: {
     fonts = {
       enableDefaultPackages = true;
       packages = with pkgs; [
         nerd-fonts.jetbrains-mono
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
-        noto-fonts-emoji
+        noto-fonts-color-emoji
       ];
       fontconfig.defaultFonts = {
         serif = [ "Noto Serif" "Noto Serif CJK SC" ];

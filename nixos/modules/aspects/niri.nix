@@ -1,21 +1,22 @@
-{ pkgs, ... }:
+{ ... }:
 let
-  dotfilesRoot = "/home/elio/.dotfiles/dotfiles-src";
+  dotconfigs = "/home/elio/dotfiles/dotconfigs";
 in
 {
   den.aspects.niri = {
-    nixos = { ... }: {
+    nixos = { pkgs, ... }: {
       programs.niri.enable = true;
-      environment.systemPackages = [ pkgs.noctalia ];
     };
 
     homeManager = { config, ... }: {
-      # Rule 3: Live symlink out-of-store
+      wayland.windowManager.niri = {
+        enable = true;
+	systemd.enable = true;
+	#enableDefaultConfig = true;
+	#extraConfig = "spawn-at-startup "noctalia"";
+      };
       xdg.configFile."niri/config.kdl".source =
-        config.lib.file.mkOutOfStoreSymlink "${dotfilesRoot}/niri/config.kdl";
-        
-      xdg.configFile."noctalia/config.json".source =
-        config.lib.file.mkOutOfStoreSymlink "${dotfilesRoot}/noctalia/config.json";
+        config.lib.file.mkOutOfStoreSymlink "${dotconfigs}/niri/config.kdl";
     };
   };
 }

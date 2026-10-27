@@ -1,8 +1,8 @@
+# nixos/flake.nix
 {
   description = "Den Flake Configuration";
 
   inputs = {
-    # Using unstable to ensure the latest Niri, Noctalia, and Ghostty packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
@@ -15,5 +15,10 @@
   };
 
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.den.flakeModule
+        (inputs.import-tree ./modules)
+      ];
+    };
 }

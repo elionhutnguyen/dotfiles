@@ -1,11 +1,11 @@
-{ pkgs, ... }:
+{ ... }:
 {
-  den.aspects.display-manager.nixos = { config, ... }: {
+  den.aspects.display-manager.nixos = { config, pkgs, ... }: {
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd niri-session";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd niri-session";
           user = "greeter";
         };
       };

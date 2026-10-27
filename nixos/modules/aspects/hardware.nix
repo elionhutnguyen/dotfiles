@@ -1,10 +1,9 @@
-{ pkgs, lib, ... }:
+{ ... }:
 {
-  den.aspects.hardware.nixos = { config, ... }: {
-    imports = [ ../hardware-configuration.nix ];
+  den.aspects.hardware.nixos = { pkgs, ... }: {
+    imports = [ ../_hardware-configuration.nix ];
 
     boot.kernelModules = [ "asus_nb_wmi" ];
-
     # 1. 80% Battery Threshold (Applies on boot)
     systemd.tmpfiles.rules = [
       "w /sys/class/power_supply/BAT0/charge_control_end_threshold - - - - 80"
@@ -21,7 +20,7 @@
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+      extraPackages = with pkgs; [ libva-vdpau-driver libvdpau-va-gl ];
     };
 
     services.xserver.videoDrivers = [ "nvidia" ];

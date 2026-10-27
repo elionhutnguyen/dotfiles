@@ -1,34 +1,33 @@
-{ pkgs, ... }:
+{ ... }:
 let
-  dotfilesRoot = "/home/elio/.dotfiles/dotfiles-src";
+  dotconfigs = "/home/elio/dotfiles/dotconfigs";
 in
 {
-  den.aspects.cli.homeManager = { config, ... }: {
-    # Rule 1 & 2 Compliant
+  den.aspects.cli.homeManager = { config, pkgs, ... }: {
     programs.zsh = {
       enable = true;
       enableCompletion = true;
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
-      initExtra = ''
-        if [ -f "${dotfilesRoot}/zsh/.zshrc" ]; then
-          source "${dotfilesRoot}/zsh/.zshrc"
+      initContent = ''
+        if [ -f "${dotconfigs}/zsh/.zshrc" ]; then
+          source "${dotconfigs}/zsh/.zshrc"
         fi
       '';
     };
 
     programs.git = {
       enable = true;
-      includes = [ { path = "${dotfilesRoot}/git/config"; } ];
+      includes = [ { path = "${dotconfigs}/git/config"; } ];
     };
 
     programs.neovim = {
       enable = true;
       defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
+      withRuby = false;
+      withPython3 = false;
       extraLuaConfig = ''
-        local init_file = "${dotfilesRoot}/nvim/init.lua"
+        local init_file = "${dotconfigs}/nvim/init.lua"
         if vim.uv.fs_stat(init_file) then
           dofile(init_file)
         end
@@ -37,9 +36,9 @@ in
 
     programs.lf = {
       enable = true;
-      extraConfig = "source ${dotfilesRoot}/lf/lfrc";
+      extraConfig = "source ${dotconfigs}/lf/lfrc";
     };
 
-    home.packages = with pkgs; [ p7zip atool ];
+    home.packages = with pkgs; [ ouch ];
   };
 }
