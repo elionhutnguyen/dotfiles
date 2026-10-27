@@ -1,6 +1,6 @@
 { ... }:
 let
-  dotconfigs = "home/elio/dotfiles/dotconfigs/";
+  dotconfigs = "/home/elio/dotfiles/dotconfigs/";
 in
 {
   den.aspects.vicinae = {
