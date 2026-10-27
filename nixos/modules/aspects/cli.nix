@@ -10,16 +10,10 @@ in
       enableCompletion = true;
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
-     # initContent = ''
-       # if [ -f "${dotconfigs}/zsh/.zshrc" ]; then
-         # source "${dotconfigs}/zsh/.zshrc"
-       # fi
-     # '';
     };
 
     programs.git = {
       enable = true;
-     # includes = [ { path = "${dotconfigs}/git/config"; } ];
     };
 
     programs.neovim = {
@@ -27,12 +21,6 @@ in
       defaultEditor = true;
       withRuby = false;
       withPython3 = false;
-     # extraLuaConfig = ''
-       # local init_file = "${dotconfigs}/nvim/init.lua"
-       # if vim.uv.fs_stat(init_file) then
-         # dofile(init_file)
-       # end
-     # '';
     };
   };
 
@@ -43,5 +31,6 @@ in
     };
 
     home.packages = with pkgs; [ ouch ];
+    programs.zsh.autocd = true;
   };
 }

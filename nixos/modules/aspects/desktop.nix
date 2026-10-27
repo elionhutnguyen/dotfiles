@@ -15,7 +15,7 @@ in
 
     programs.mpv = {
       enable = true;
-      extraInput = "include=${dotconfigs}/mpv/mpv.conf";
+      includes = [ "${dotconfigs}/mpv/mpv.conf" ];
     };
 
     programs.firefox = {

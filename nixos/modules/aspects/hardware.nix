@@ -42,10 +42,6 @@
       };
     };
 
-    environment.sessionVariables = {
-      LIBVA_DRIVER_NAME = "nvidia";
-    };
-
     # 3. Dynamic Power State Management via Udev
     services.udev.extraRules = ''
       SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{device}=="0x1f99", ATTR{power/control}="auto"

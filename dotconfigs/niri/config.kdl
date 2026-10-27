@@ -19,8 +19,8 @@ layout {
 
 binds {
     Mod+Q repeat=false { close-window; }
-    Mod+T hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
-    Mod+D hotkey-overlay-title="Run an Application: " { spawn ""; }
+    Mod+T hotkey-overlay-title="Open a Terminal: Ghostty" { spawn "ghostty"; }
+    Mod+D hotkey-overlay-title="Run an Application: Vicinae" { spawn "vicinae" "toggle"; }
     
     Mod+H     { focus-column-left; }
     Mod+J     { focus-window-down; }
@@ -56,4 +56,3 @@ binds {
     Mod+Ctrl+9 { move-column-to-workspace 9; }
 }
 
-spawn-at-startup "noctalia"
