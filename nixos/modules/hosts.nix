@@ -9,7 +9,7 @@
   den.default = {
     nixos.system.stateVersion = "25.05";
     homeManager.home.stateVersion = "25.05";
-
+    nixos.home-manager.backupFileExtension = "backup";
     includes = [
       den.batteries.define-user
       den.batteries.hostname
