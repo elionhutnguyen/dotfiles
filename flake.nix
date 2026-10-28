@@ -1,6 +1,5 @@
-# nixos/flake.nix
 {
-  description = "Den Flake Configuration";
+  description = "Elio Flake Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

@@ -1,6 +1,6 @@
 { ... }:
 {
-  den.aspects.display-manager.nixos = { config, pkgs, ... }: {
+  den.aspects.greetd.nixos = { pkgs, ... }: {
     services.greetd = {
       enable = true;
       settings = {
@@ -15,7 +15,7 @@
       Type = "idle";
       StandardInput = "tty";
       StandardOutput = "tty";
-      StandardError = "journal"; 
+      StandardError = "journal";
       TTYReset = true;
       TTYVHangup = true;
       TTYVTDisallocate = true;
