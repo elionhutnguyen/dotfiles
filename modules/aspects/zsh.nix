@@ -18,7 +18,7 @@
       in
       {
         programs.zsh = {
-          enable = true
+          enable = true;
           dotDir = "${config.xdg.configHome}/zsh";
           initContent = ''
             if [ -f "${dotconfigs}/zsh/.zshrc" ]; then
