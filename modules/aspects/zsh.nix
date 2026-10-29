@@ -17,8 +17,15 @@
         dotconfigs = "${config.home.homeDirectory}/dotfiles/dotconfigs";
       in
       {
-        home.file.".zshrc".source =
-          config.lib.file.mkOutOfStoreSymlink "${dotconfigs}/zsh/.zshrc";
+        programs.zsh = {
+          enable = true
+          dotDir = "${config.xdg.configHome}/zsh";
+          initContent = ''
+            if [ -f "${dotconfigs}/zsh/.zshrc" ]; then
+              source "${dotconfigs}/zsh/.zshrc"
+            fi
+          '';
+        };
       };
   };
 }

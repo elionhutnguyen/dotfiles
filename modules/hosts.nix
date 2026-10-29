@@ -11,6 +11,7 @@
   den.aspects.elio.nixos = {
     imports = [ ./_hardware-configuration.nix ];
     services.fstrim.enable = true; # SSD TRIM attached directly to disk hardware
+    time.timeZone = "Asia/Taipei";
   };
 
   den.default = {
@@ -48,11 +49,13 @@
     neovim
     zsh
     git
-    lf
     mpv
     vscodium
     anki
     brave-origin
     onlyoffice
+    comma
+    faugus-launcher
+    yazi
   ];
 }
