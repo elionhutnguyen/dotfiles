@@ -1,0 +1,69 @@
+{
+        "$schema": "https://vicinae.com/schemas/config.json",
+        "imports": [],
+        "telemetry": {
+                "system_info": false
+        },
+        "input_server": {
+                "enabled": true
+        },
+        "tray": {
+                "enabled": true
+        },
+        "search_files_in_root": false,
+        "activate_on_single_click": false,
+        "escape_key_behavior": "navigate_back",
+        "pop_on_backspace": true,
+        "close_on_focus_loss": false,
+        "consider_preedit": false,
+        "pop_to_root_on_close": false,
+        "favicon_service": "twenty",
+        "keybinding": "default",
+        "font": {
+                "normal": {
+                        "family": "auto"
+                }
+        },
+        "theme": {
+                "light": {
+                        "name": "vicinae-light",
+                        "icon_theme": "auto"
+                },
+                "dark": {
+                        "name": "vicinae-dark",
+                        "icon_theme": "auto"
+                }
+        },
+        "launcher_window": {
+                "material": "auto",
+                "client_side_decorations": {
+                        "enabled": true,
+                        "border_width": 1,
+                        "shadow_size": 12
+                },
+                "compact_mode": {
+                        "enabled": false
+                },
+                "size": {
+                        "width": 770,
+                        "height": 480
+                },
+                "screen": "auto",
+                "layer_shell": {
+                        "enabled": true,
+                        "keyboard_interactivity": "exclusive",
+                        "layer": "top"
+                }
+        },
+        "global_shortcuts": {
+                "inhibit_apps": []
+        },
+        "keybinds": {},
+        "favorites": [
+                "clipboard:history"
+        ],
+        "fallbacks": [
+                "files:search"
+        ],
+        "providers": {}
+}

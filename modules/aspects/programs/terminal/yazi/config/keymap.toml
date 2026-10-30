@@ -1,0 +1,110 @@
+#:schema https://yazi-rs.github.io/schemas/keymap.json
+
+[mgr]
+keymap = [
+	# --- Esc & Exit ---
+	{ on = "<Esc>", run = "escape", desc = "Clear selection, cancel search, or exit visual mode" },
+	{ on = "q",     run = "quit",   desc = "Quit Yazi" },
+	{ on = "Q",     run = "quit --no-cwd-file", desc = "Quit without outputting cwd-file" },
+
+	# --- Navigation & History ---
+	{ on = "k", run = "arrow prev", desc = "Previous item" },
+	{ on = "j", run = "arrow next", desc = "Next item" },
+	{ on = "h", run = "leave",      desc = "Parent directory" },
+	{ on = "l", run = "enter",      desc = "Enter directory" },
+	{ on = "H", run = "back",       desc = "Back in history" },
+	{ on = "L", run = "forward",    desc = "Forward in history" },
+	{ on = [ "g", "g" ], run = "arrow top", desc = "Jump to top" },
+	{ on = "G",          run = "arrow bot", desc = "Jump to bottom" },
+	{ on = "<C-u>", run = "arrow -50%",  desc = "Page up 50%" },
+	{ on = "<C-d>", run = "arrow 50%",   desc = "Page down 50%" },
+
+	# --- Selection & Visual ---
+	{ on = "<Space>", run = [ "toggle", "arrow 1" ], desc = "Toggle selection and move down" },
+	{ on = "<C-a>",   run = "toggle_all --state=on", desc = "Select all" },
+	{ on = "<C-r>",   run = "toggle_all",            desc = "Invert selection" },
+	{ on = "v",       run = "visual_mode",          desc = "Enter visual mode" },
+	{ on = "V",       run = "visual_mode --unset",  desc = "Unset visual mode" },
+
+	# --- Fast Directory Bookmarks ---
+	{ on = [ "g", "h" ], run = "cd ~",             desc = "Go home (~)" },
+	{ on = [ "g", "c" ], run = "cd ~/.config",     desc = "Go to ~/.config" },
+	{ on = [ "g", "d" ], run = "cd ~/Downloads",   desc = "Go to ~/Downloads" },
+	{ on = [ "g", "D" ], run = "cd ~/Documents",   desc = "Go to ~/Documents" },
+	{ on = [ "g", "p" ], run = "cd ~/Projects",    desc = "Go to ~/Projects" },
+	{ on = [ "g", "m" ], run = "cd /media",        desc = "Go to /media or /mnt" },
+	{ on = [ "g", "/" ], run = "cd /",             desc = "Go to /" },
+	{ on = [ "g", "e" ], run = "cd /etc",          desc = "Go to /etc" },
+	{ on = [ "g", "T" ], run = "cd /tmp",          desc = "Go to /tmp" },
+	{ on = [ "g", "t" ], run = "plugin trash",     desc = "Go to trash bin" },
+	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Jump interactively" },
+
+	# --- High-Frequency Shell & Terminal Drops ---
+	{ on = "!", run = 'shell "$SHELL" --block',      desc = "Drop into full terminal subshell in CWD" },
+	{ on = ";", run = "shell --interactive",         desc = "Run shell command" },
+	{ on = ":", run = "shell --block --interactive", desc = "Run shell command (blocking)" },
+
+	# --- File Operations ---
+	{ on = "o",       run = "open",                        desc = "Open file" },
+	{ on = "O",       run = "open --interactive",          desc = "Open with..." },
+	{ on = "<Enter>", run = "open",                        desc = "Open file" },
+	{ on = "y",       run = "yank",                        desc = "Yank (copy)" },
+	{ on = "x",       run = "yank --cut",                  desc = "Yank (cut)" },
+	{ on = "p",       run = "paste",                       desc = "Paste" },
+	{ on = "P",       run = "paste --force",               desc = "Paste (overwrite)" },
+	{ on = "d",       run = "remove",                      desc = "Move to trash" },
+	{ on = "D",       run = "remove --permanently",        desc = "Permanently delete" },
+	{ on = "a",       run = "create",                      desc = "Create file (ends in / for dir)" },
+	{ on = "A",       run = "bulk_create",                 desc = "Bulk create files" },
+	{ on = "r",       run = "rename --cursor=before_ext",  desc = "Smart rename" },
+
+	# --- Fast Copying & Yanks (Dual c-chord and Vim y-chord) ---
+	{ on = [ "y", "p" ], run = "copy path",             desc = "Yank full path" },
+	{ on = [ "y", "d" ], run = "copy dirpath",          desc = "Yank directory path" },
+	{ on = [ "y", "f" ], run = "copy filename",         desc = "Yank filename" },
+	{ on = [ "y", "n" ], run = "copy name_without_ext", desc = "Yank filename without ext" },
+	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy path" },
+	{ on = [ "c", "d" ], run = "copy dirpath",          desc = "Copy directory path" },
+	{ on = [ "c", "f" ], run = "copy filename",         desc = "Copy filename" },
+	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy filename without ext" },
+
+	# --- Search, Filter & Jump ---
+	{ on = "s",     run = "search --via=fd",     desc = "Search filenames (fd)" },
+	{ on = "S",     run = "search --via=rg",     desc = "Search contents (ripgrep)" },
+	{ on = "f",     run = "filter --smart",      desc = "Filter files in current directory" },
+	{ on = "/",     run = "find --smart",        desc = "Find forward" },
+	{ on = "?",     run = "find --previous --smart", desc = "Find backward" },
+	{ on = "n",     run = "find_arrow",          desc = "Next match" },
+	{ on = "N",     run = "find_arrow --previous", desc = "Previous match" },
+	{ on = "z",     run = "plugin fzf",          desc = "FZF jump" },
+	{ on = "Z",     run = "plugin zoxide",       desc = "Zoxide jump" },
+	{ on = "<C-s>", run = "escape --search",     desc = "Cancel search" },
+
+	# --- Quick Linemode Toggles ---
+	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: Size" },
+	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "Linemode: Modified time" },
+	{ on = [ "m", "p" ], run = "linemode permissions", desc = "Linemode: Permissions" },
+	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: Owner" },
+	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: None" },
+
+	# --- View Controls & Tabs ---
+	{ on = ".", run = "hidden toggle",             desc = "Toggle hidden files" },
+	{ on = "t", run = "tab_create --current",      desc = "New tab in CWD" },
+	{ on = "w", run = "close",                     desc = "Close current tab" },
+	{ on = "W", run = "tasks:show",                desc = "Show task manager" },
+	{ on = "1", run = "tab_switch 0", desc = "Switch to tab 1" },
+	{ on = "2", run = "tab_switch 1", desc = "Switch to tab 2" },
+	{ on = "3", run = "tab_switch 2", desc = "Switch to tab 3" },
+	{ on = "4", run = "tab_switch 3", desc = "Switch to tab 4" },
+	{ on = "5", run = "tab_switch 4", desc = "Switch to tab 5" },
+	{ on = "[", run = "tab_switch -1 --relative",  desc = "Previous tab" },
+	{ on = "]", run = "tab_switch 1 --relative",   desc = "Next tab" },
+	{ on = "{", run = "tab_swap -1",               desc = "Swap tab left" },
+	{ on = "}", run = "tab_swap 1",                desc = "Swap tab right" },
+
+	# --- Preview Seeking & Spotting ---
+	{ on = "K",     run = "seek -5", desc = "Scroll preview up" },
+	{ on = "J",     run = "seek 5",  desc = "Scroll preview down" },
+	{ on = "<Tab>", run = "spot",    desc = "Spot file details" },
+	{ on = "~",     run = "help",    desc = "Show help menu" },
+]
