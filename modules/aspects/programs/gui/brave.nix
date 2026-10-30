@@ -1,6 +1,6 @@
 { ... }:
 {
-  den.aspects.brave-origin.homeManager = { pkgs, ... }: {
+  den.aspects.brave.homeManager = { pkgs, ... }: {
     home.packages = [ pkgs.brave-origin ];
   };
 }

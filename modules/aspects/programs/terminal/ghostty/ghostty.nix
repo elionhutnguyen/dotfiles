@@ -2,7 +2,7 @@
 {
   den.aspects.ghostty.homeManager = { config, ... }:
     let
-      sliceDir = "${config.home.homeDirectory}/dotfiles/modules/aspects/desktop/ghostty";
+      sliceDir = "${config.home.homeDirectory}/dotfiles/modules/aspects/programs/terminal/ghostty";
     in
     {
       programs.ghostty.enable = true;

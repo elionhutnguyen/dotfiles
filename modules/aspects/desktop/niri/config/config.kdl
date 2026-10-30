@@ -1,4 +1,5 @@
 spawn-at-startup "xwayland-satellite"
+spawn-at-startup "fcitx5" "-d"
 
 input {
     keyboard {
@@ -51,9 +52,13 @@ window-rule {
     clip-to-geometry true
 }
 
+// Dialogs and Authentication Prompts
 window-rule {
     match app-id=r#"^org\.gnome\.Polkit.*"#
+    match app-id="polkit-gnome-authentication-agent-1"
     match app-id=r#"^xdg-desktop-portal.*"#
+    match app-id=r#"^org\.fcitx\..*"#
+    match app-id="fcitx5-config-qt"
     match title=r#"^Picture-in-Picture$"#
     match title=r#"^Open File.*"#
     match title=r#"^Save File.*"#
@@ -63,6 +68,7 @@ window-rule {
 // Screencast Privacy: Prevents credential dialogs from appearing in presentations
 window-rule {
     match app-id=r#"^org\.gnome\.Polkit.*"#
+    match app-id="polkit-gnome-authentication-agent-1"
     match app-id=r#"^xdg-desktop-portal.*"#
     block-out-from "screencast"
 }
@@ -74,8 +80,6 @@ binds {
     Mod+D hotkey-overlay-title="Run an Application: Vicinae" { spawn "vicinae" "toggle"; }
     Mod+E hotkey-overlay-title="File Manager: Yazi" { spawn "ghostty" "-e" "yazi"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-
-    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
@@ -91,12 +95,11 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
-    // Dynamic Cast Controls (Window switching during presentations)
+    // Dynamic Cast Controls (Collision resolved: Mod+Alt+C for clear target)
     Mod+Shift+C { set-dynamic-cast-window; }
-    Mod+Ctrl+C  { clear-dynamic-cast-target; }
+    Mod+Alt+C   { clear-dynamic-cast-target; }
 
     Mod+O repeat=false { toggle-overview; }
-
     Mod+Q repeat=false { close-window; }
 
     Mod+H     { focus-column-left; }
@@ -161,9 +164,7 @@ binds {
 
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
-
     Mod+M { maximize-window-to-edges; }
-
     Mod+Ctrl+F { expand-column-to-available-width; }
 
     Mod+C { center-column; }

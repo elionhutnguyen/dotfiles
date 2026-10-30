@@ -9,7 +9,7 @@
       systemd.user.services.polkit-gnome-authentication-agent-1 = {
         Unit = {
           Description = "polkit-gnome-authentication-agent-1";
-          Wants = [ "graphical-session.target" ];
+          PartOf = [ "graphical-session.target" ];
           After = [ "graphical-session.target" ];
         };
         Install = {

@@ -1,6 +1,6 @@
 { ... }:
 {
-  den.aspects.xdg-user-dirs.homeManager = { config, ... }: {
+  den.aspects.xdg.homeManager = { config, ... }: {
     xdg.userDirs = {
       enable = true;
       createDirectories = false;

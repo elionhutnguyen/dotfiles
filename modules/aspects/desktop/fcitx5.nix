@@ -9,6 +9,7 @@
         addons = with pkgs; [
           fcitx5-bamboo
           qt6Packages.fcitx5-chinese-addons
+          qt6Packages.fcitx5-configtool
           fcitx5-gtk
         ];
       };

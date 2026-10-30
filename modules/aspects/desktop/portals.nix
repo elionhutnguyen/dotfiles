@@ -1,9 +1,23 @@
 { ... }:
 {
-  den.aspects.portals.nixos = {
+  den.aspects.portals.nixos = { pkgs, ... }: {
     xdg.portal = {
       enable = true;
-      config.common.default = [ "gtk" ];
+      extraPortals = [
+        pkgs.xdg-desktop-portal-gnome
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      config = {
+        niri = {
+          default = [ "gnome" "gtk" ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        };
+        common = {
+          default = [ "gtk" ];
+        };
+      };
     };
 
     services.gnome.gnome-keyring.enable = true;

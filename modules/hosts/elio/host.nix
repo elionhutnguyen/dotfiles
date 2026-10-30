@@ -14,10 +14,11 @@
 
   # 3. Global Baseline Settings
   den.default = {
-    nixos.system.stateVersion = "25.05";
-    homeManager.home.stateVersion = "25.05";
+    nixos.system.stateVersion = "26.05";
+    homeManager.home.stateVersion = "26.05";
     nixos.home-manager.backupFileExtension = "backup";
     nixos.home-manager.useGlobalPkgs = true;
+    nixos.home-manager.useUserPackages = true;
     includes = [
       den.batteries.define-user
       den.batteries.hostname
@@ -39,74 +40,63 @@
 
   # 5. Master Aspect Inclusions
   den.aspects.elio.includes = with den.aspects; [
-    # Core System
-    nix-daemon
+    # System Foundation & Daemons
+    boot
+    nix
     locale
-    zram
-    oomd
+    memory
     journald
-
-    # Hardware & Power
-    bootloader
-    graphics-nvidia
-    cardwire
-    power-profiles
-    battery-charge-limit
     fstrim
-
-    # System Daemons & Services
-    networkmanager
-    bluetooth
-    pipewire
-    wiremix
-    playerctl
     ananicy
-    greetd
+    networking
+    bluetooth
+    audio
     udisks
     gvfs
-    udiskie
+
+    # Hardware & Power Management
+    nvidia
+    cardwire
+    power
 
     # Desktop Environment & Wayland Session
+    greetd
     niri
-    ghostty
     noctalia
     vicinae
-    xwayland
-    swaylock
-    swayidle
-    wlsunset
+    lockscreen
     portals
     polkit
-    fonts
     fcitx5
-    brightnessctl
+    fonts
+    wlsunset
     clipboard
-    xdg-user-dirs
+    brightnessctl
+    xdg
+    xwayland
 
-    # Programs: Terminal (CLI & TUI)
-    git
+    # Applications: Terminal & CLI
+    ghostty
     neovim
     yazi
+    git
     zsh
+    search
+    archives
+    hw-tools
+    monitors
     fzf
     zoxide
-    ripgrep
-    fd
     trash-cli
-    _7zz-rar
-    unrar
-    btop
-    nvtop
-    pciutils
-    usbutils
-    comma
+    wiremix
+    playerctl
 
-    # Programs: Graphical Applications
-    mpv
+    # Applications: Graphical (GUI)
+    brave
     vscodium
-    brave-origin
+    mpv
     anki
     onlyoffice
-    faugus-launcher
+    faugus
   ];
 }

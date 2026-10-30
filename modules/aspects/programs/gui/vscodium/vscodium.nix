@@ -7,7 +7,7 @@
     {
       programs.vscodium.enable = true;
 
-      xdg.configFile."VSCodium".source =
-        config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
+      xdg.configFile."VSCodium/User/settings.json".source =
+        config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config/User/settings.json";
     };
 }
