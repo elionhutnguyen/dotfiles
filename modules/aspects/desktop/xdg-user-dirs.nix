@@ -5,6 +5,7 @@
       enable = true;
       createDirectories = false;
       download = "${config.home.homeDirectory}/Downloads";  
+      setSessionVariables = false;
     };
   };
 }

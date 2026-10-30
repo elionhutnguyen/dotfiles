@@ -1,7 +1,4 @@
-{ config, ... }:
-let
-  sliceDir = "${config.home.homeDirectory}/dotfiles/modules/aspects/desktop/noctalia";
-in
+{ ... }:
 {
   den.aspects.noctalia = {
     nixos = {
@@ -12,9 +9,13 @@ in
       };
     };
 
-    homeManager = {
-      xdg.configFile."noctalia".source =
-        config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
-    };
+    homeManager = { config, ... }:
+      let
+        sliceDir = "${config.home.homeDirectory}/dotfiles/modules/aspects/desktop/noctalia";
+      in
+      {
+        xdg.configFile."noctalia".source =
+          config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
+      };
   };
 }

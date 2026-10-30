@@ -1,17 +1,21 @@
 { ... }:
 {
-  den.aspects.nix-daemon.nixos = {
+  den.aspects.nix-daemon.nixos = { pkgs, ... }: {
     nixpkgs.config.allowUnfree = true;
 
-    nix.settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      auto-optimise-store = true;
-    };
+    nix = {
+      package = pkgs.nixVersions.latest;
 
-    nix.gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
+      settings = {
+        experimental-features = [ "nix-command" "flakes" ];
+        auto-optimise-store = true;
+      };
+
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 7d";
+      };
     };
   };
 }

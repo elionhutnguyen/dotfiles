@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   den.aspects.swayidle.homeManager = { pkgs, ... }: {
     services.swayidle = {
@@ -13,16 +13,10 @@
           command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
         }
       ];
-      events = [
-        {
-          event = "before-sleep";
-          command = "${pkgs.swaylock}/bin/swaylock -f";
-        }
-        {
-          event = "lock";
-          command = "${pkgs.swaylock}/bin/swaylock -f";
-        }
-      ];
+      events = {
+        before-sleep = "${pkgs.swaylock}/bin/swaylock -f";
+        lock = "${pkgs.swaylock}/bin/swaylock -f";
+      };
     };
   };
 }

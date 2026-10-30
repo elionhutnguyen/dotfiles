@@ -1,18 +1,9 @@
 { ... }:
 {
-  den.aspects.portals.nixos = { pkgs, ... }: {
+  den.aspects.portals.nixos = {
     xdg.portal = {
       enable = true;
-      config.niri = {
-        default = [ "gtk" ];
-        "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
-        "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
-        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-      };
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gnome
-        xdg-desktop-portal-gtk
-      ];
+      config.common.default = [ "gtk" ];
     };
 
     services.gnome.gnome-keyring.enable = true;

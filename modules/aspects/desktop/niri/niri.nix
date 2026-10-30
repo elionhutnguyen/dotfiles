@@ -1,16 +1,20 @@
-{ config, ... }:
-let
-  sliceDir = "${config.home.homeDirectory}/dotfiles/modules/aspects/desktop/niri";
-in
+{ ... }:
 {
   den.aspects.niri = {
     nixos = {
-      programs.niri.enable = true;
+      programs.niri = {
+        enable = true;
+        useNautilus = false;
+      };
     };
 
-    homeManager = {
-      xdg.configFile."niri".source =
-        config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
-    };
+    homeManager = { config, ... }:
+      let
+        sliceDir = "${config.home.homeDirectory}/dotfiles/modules/aspects/desktop/niri";
+      in
+      {
+        xdg.configFile."niri".source =
+          config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
+      };
   };
 }
