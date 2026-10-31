@@ -53,6 +53,7 @@
     audio
     udisks
     gvfs
+    fwupd
 
     # Hardware & Power Management
     nvidia
