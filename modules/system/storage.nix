@@ -5,7 +5,9 @@
       services.udisks2.enable = true;
       services.gvfs.enable = true;
       systemd.tmpfiles.rules = [
-        "d /home/data 0775 elio users -" ];
+        "d /home/data 0775 elio users -"
+        "z /home/data 0775 elio users -"
+      ];
     };
 
     homeManager = {

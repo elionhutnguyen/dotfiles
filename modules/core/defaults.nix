@@ -7,6 +7,10 @@
     nixos.home-manager.backupFileExtension = "backup";
     nixos.home-manager.useGlobalPkgs = true;
     nixos.home-manager.useUserPackages = true;
+    nixos.environment.pathsToLink = [
+      "/share/xdg-desktop-portal"
+      "/share/applications"
+    ];
     includes = [
       den.batteries.define-user
       den.batteries.hostname

@@ -6,7 +6,7 @@
       enableZshIntegration = true;
       shellWrapperName = "y";
       package = pkgs.yazi.override {
-	_7zz = pkgs._7zz-rar;
+        _7zz = pkgs._7zz-rar;
       };
     };
   };

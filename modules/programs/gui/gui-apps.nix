@@ -32,8 +32,8 @@
         gpu-context = "wayland";
         ytdl-format = "bestvideo+bestaudio";
         cache = "yes";
-	demuxer-max-bytes = 419430400; # 400 MiB buffer
-	demuxer-max-back-bytes = 104857600; # 100 MiB backward buffer
+        demuxer-max-bytes = 419430400; # 400 MiB buffer
+        demuxer-max-back-bytes = 104857600; # 100 MiB backward buffer
         keep-open = "yes";
         save-position-on-quit = true;
       };

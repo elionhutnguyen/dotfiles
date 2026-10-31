@@ -1,7 +1,7 @@
 { den, ... }:
 {
   # 1. Host Entity Declaration
-  den.hosts.x86_64-linux.elio = {
+  den.hosts.x86_64-linux.elio-laptop = {
     users.elio = {
       classes = [ "homeManager" "user" ];
     };

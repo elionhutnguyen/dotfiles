@@ -5,15 +5,19 @@
       programs.zsh = {
         enable = true;
         enableCompletion = true;
-        autosuggestions.enable = true;
-        syntaxHighlighting.enable = true;
       };
       users.defaultUserShell = pkgs.zsh;
       programs.git.enable = true;
     };
 
     homeManager = {
-      programs.zsh.enable = true;
+      programs.zsh = {
+        enable = true;
+        enableCompletion = true;
+        autosuggestion.enable = true;
+        syntaxHighlighting.enable = true;
+      };
+
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;

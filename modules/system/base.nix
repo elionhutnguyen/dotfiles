@@ -25,7 +25,7 @@
 
     systemd.oomd = {
       enable = true;
-      enableUserSlices = true;
+      enableUserSlices = false;
     };
 
     # 3. System Maintenance Daemons
