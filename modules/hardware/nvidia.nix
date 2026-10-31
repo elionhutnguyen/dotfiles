@@ -38,7 +38,6 @@
         external_display_auto_switch = true;
       };
     };
-
-    boot.kernelParams = [ "lsm=lockdown,yama,integrity,apparmor,bpf" ];
+    boot.kernelParams = [ "lsm=landlock,lockdown,yama,integrity,apparmor,bpf" ];
   };
 }

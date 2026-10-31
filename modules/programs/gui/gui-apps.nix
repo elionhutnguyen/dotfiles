@@ -31,7 +31,9 @@
         hwdec = "auto-safe";
         gpu-context = "wayland";
         ytdl-format = "bestvideo+bestaudio";
-        cache-default = 4000000;
+        cache = "yes";
+	demuxer-max-bytes = 419430400; # 400 MiB buffer
+	demuxer-max-back-bytes = 104857600; # 100 MiB backward buffer
         keep-open = "yes";
         save-position-on-quit = true;
       };
