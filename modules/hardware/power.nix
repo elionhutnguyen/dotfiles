@@ -1,17 +1,10 @@
 { ... }:
 {
-  den.aspects.hardware.nixos = {
-    # 1. Bluetooth
-    hardware.bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
-    services.blueman.enable = true;
-
-    # 2. Power Profiles Daemon
+  den.aspects.power.nixos = {
+    # 1. System power profile states
     services.power-profiles-daemon.enable = true;
 
-    # 3. ASUS Battery Charge Threshold (80% lifespan limit)
+    # 2. ASUS Battery Charge Threshold (80% lifespan limit)
     boot.kernelModules = [ "asus_nb_wmi" ];
 
     systemd.tmpfiles.rules = [

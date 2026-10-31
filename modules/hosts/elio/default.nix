@@ -12,7 +12,7 @@
     imports = [ ./_hardware-configuration.nix ];
   };
 
-  # 3. User Group Assignments (Pruned phantom groups)
+  # 3. User Group Assignments
   den.aspects.elio.user.extraGroups = [
     "wheel"
     "audio"
@@ -31,11 +31,12 @@
     networking
     storage
     media
-    hardware
     tuning
 
-    # Hardware Drivers
+    # Hardware Drivers & Power (Clean 1-to-1 matching)
     nvidia
+    power
+    bluetooth
 
     # Desktop & Wayland Session
     greetd
