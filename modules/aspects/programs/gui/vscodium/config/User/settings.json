@@ -1,9 +1,0 @@
-{
-  "editor.fontFamily": "'JetBrainsMono Nerd Font', monospace",
-  "editor.fontSize": 14,
-  "editor.tabSize": 2,
-  "editor.formatOnSave": true,
-  "workbench.colorTheme": "Default Dark Modern",
-  "window.titleBarStyle": "custom",
-  "telemetry.telemetryLevel": "off"
-}

@@ -4,9 +4,11 @@ spawn-at-startup "fcitx5" "-d"
 input {
     keyboard {
         xkb {
+            layout "us"
         }
         repeat-delay 300
         repeat-rate 40
+        numlock
     }
 
     touchpad {
