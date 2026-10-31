@@ -8,7 +8,7 @@
   };
 
   # 2. Hardware Specification
-  den.aspects.elio.nixos = {
+  den.aspects.elio-laptop.nixos = {
     imports = [ ./_hardware-configuration.nix ];
   };
 
@@ -23,7 +23,7 @@
   ];
 
   # 4. Master Aspect Inclusions
-  den.aspects.elio.includes = with den.aspects; [
+  den.aspects.elio-laptop.includes = with den.aspects; [
     # Core & System
     nix
     base
@@ -33,7 +33,7 @@
     media
     tuning
 
-    # Hardware Drivers & Power (Clean 1-to-1 matching)
+    # Hardware Drivers & Power
     nvidia
     power
     bluetooth
