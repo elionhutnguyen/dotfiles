@@ -11,6 +11,8 @@
       trash-cli
 
       # System Inspection & Monitors
+      libva-utils
+      vdpauinfo
       pciutils
       usbutils
       nvtopPackages.full

@@ -54,5 +54,8 @@
 
     # GUI Applications
     gui-apps
+    firefox
+    mpv
+    gaming
   ];
 }

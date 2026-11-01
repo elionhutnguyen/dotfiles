@@ -66,6 +66,10 @@
     };
 
     homeManager = { config, pkgs, ... }: {
+      systemd.user.tmpfiles.rules = [
+        "e %h/.cache - - - 30d"
+        "e %h/.local/share/Trash - - - 60d"
+      ];
       # Polkit Authentication Agent
       systemd.user.services.polkit-gnome-authentication-agent-1 = {
         Unit = {
@@ -86,10 +90,11 @@
       };
 
       # Standard XDG Dirs
+      xdg.enable = true;
+      home.preferXdgDirectories = true;
       xdg.userDirs = {
         enable = true;
         createDirectories = false;
-        download = "${config.home.homeDirectory}/Downloads";
         setSessionVariables = false;
       };
     };

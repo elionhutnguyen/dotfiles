@@ -3,12 +3,19 @@
   den.aspects.base.nixos = { pkgs, ... }: {
     # 1. Kernel & Bootloader
     boot.kernelPackages = pkgs.linuxPackages_latest;
-    boot.tmp.cleanOnBoot = true;
     boot.loader.systemd-boot = {
       enable = true;
       configurationLimit = 10;
     };
     boot.loader.efi.canTouchEfiVariables = true;
+
+    boot.tmp = {
+      useTmpfs = true;
+      tmpfsSize = "50%";
+      cleanOnBoot = false; # Redundant when using tmpfs
+    };
+
+    systemd.coredump.enable = false;
 
     # 2. Memory & Swap Management
     zramSwap = {
