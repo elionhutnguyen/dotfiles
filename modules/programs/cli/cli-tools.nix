@@ -1,28 +1,33 @@
 { ... }:
 {
-  den.aspects.cli-tools.homeManager = { pkgs, ... }: {
-    programs.ripgrep.enable = true;
-    programs.fd.enable = true;
-    programs.btop.enable = true;
+  den.aspects.cli-tools = { 
+    nixos = {
+      programs.git.enable = true;
+    };
+    homeManager = { pkgs, ... }: {
+      programs.ripgrep.enable = true;
+      programs.fd.enable = true;
+      programs.btop.enable = true;
 
-    home.packages = with pkgs; [
-      # Archives & File Management
-      _7zz-rar
-      trash-cli
+      home.packages = with pkgs; [
+        # Archives & File Management
+        _7zz-rar
+        trash-cli
 
-      # System Inspection & Monitors
-      libva-utils
-      vdpauinfo
-      pciutils
-      usbutils
-      nvtopPackages.full
+        # System Inspection & Monitors
+        libva-utils
+        vdpauinfo
+        pciutils
+        usbutils
+        nvtopPackages.full
 
-      # Yazi Terminal Media & Document Previews
-      ffmpegthumbnailer
-      poppler-utils
-      imagemagick
-      mediainfo
-      exiftool
-    ];
+        # Yazi Terminal Media & Document Previews
+        ffmpegthumbnailer
+        poppler-utils
+        imagemagick
+        mediainfo
+        exiftool
+      ];
+    };
   };
 }

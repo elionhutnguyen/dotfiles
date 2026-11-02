@@ -20,3 +20,22 @@ opt.scrolloff = 8
 opt.tabstop = 2
 opt.shiftwidth = 2
 opt.expandtab = true
+
+-- Supermaven inline code completion setup
+local has_supermaven, supermaven = pcall(require, "supermaven-nvim")
+if has_supermaven then
+  supermaven.setup({
+    keymaps = {
+      accept_suggestion = "<Tab>",
+      clear_suggestion = "<C-]>",
+      accept_word = "<C-j>",
+    },
+    ignore_filetypes = { "TelescopePrompt" },
+    color = {
+      suggestion_color = "#6c7086",
+      cterm = 244,
+    },
+    disable_inline_completion = false,
+    disable_keymaps = false,
+  })
+end

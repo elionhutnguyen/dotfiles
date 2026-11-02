@@ -16,6 +16,9 @@
         programs.neovim = {
           enable = true;
           sideloadInitLua = true;
+          plugins = with pkgs.vimPlugins; [
+            supermaven-nvim
+          ];
           extraPackages = with pkgs; [
             ripgrep
             fd

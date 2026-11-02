@@ -1,0 +1,15 @@
+{
+  "editor.fontFamily": "'JetBrainsMono Nerd Font', 'monospace'",
+  "editor.fontSize": 14,
+  "editor.lineNumbers": "relative",
+  "editor.cursorBlinking": "smooth",
+  "editor.formatOnSave": true,
+  "terminal.integrated.defaultProfile.linux": "zsh",
+
+  "supermaven.enable": true,
+
+  "cline.apiProvider": "gemini",
+  "cline.geminiModelId": "gemini-3.8-flash",
+  "cline.alwaysAllowReadOnly": true,
+  "cline.telemetry": false
+}

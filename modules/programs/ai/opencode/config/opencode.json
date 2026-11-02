@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": "google",
+  "model": "gemini-3.8-flash",
+  "theme": "tokyonight",
+  "autoupdate": false,
+  "options": {
+    "temperature": 0.2,
+    "max_tokens": 8192
+  },
+  "permissions": {
+    "execute_commands": "prompt",
+    "edit_files": "auto",
+    "read_files": "auto"
+  },
+  "lsp": {
+    "enabled": true
+  }
+}

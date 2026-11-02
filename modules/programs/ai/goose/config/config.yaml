@@ -1,0 +1,18 @@
+GOOSE_PROVIDER: google_gemini
+GOOSE_MODEL: gemini-3.8-flash
+GOOSE_TEMPERATURE: 0.2
+
+extensions:
+  developer:
+    enabled: true
+    type: builtin
+  memory:
+    enabled: true
+    type: builtin
+  fetch:
+    enabled: true
+    type: builtin
+
+session:
+  log_level: INFO
+  history_limit: 100

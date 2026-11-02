@@ -1,15 +1,16 @@
 { ... }:
 {
-  den.aspects.gui-apps.homeManager = { pkgs, ... }: {
-    # Standalone Packages
-    home.packages = with pkgs; [
-      anki-bin
-      brave-origin
-      materialgram
-    ];
+  den.aspects.gui-apps.homeManager = { config, pkgs, ... }: 
+    {
+      # Standalone Packages
+      home.packages = with pkgs; [
+        anki-bin
+        brave-origin
+        materialgram
+      ];
 
-    # Managed GUI Productivity Programs
-    programs.vscodium.enable = true;
-    programs.onlyoffice.enable = true;
-  };
+      # Managed Office Suite
+      programs.onlyoffice.enable = true;
+
+    };
 }

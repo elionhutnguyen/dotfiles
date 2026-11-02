@@ -32,6 +32,7 @@
     storage
     media
     tuning
+    xdg
 
     # Hardware Drivers & Power
     nvidia
@@ -46,11 +47,13 @@
     vicinae
 
     # CLI & Terminal Tools
-    shell
+    zsh
     cli-tools
     ghostty
     neovim
     yazi
+    vscode
+    ai
 
     # GUI Applications
     gui-apps
