@@ -10,6 +10,8 @@
       programs.btop.enable = true;
 
       home.packages = with pkgs; [
+        uv
+        python3
         # Archives & File Management
         _7zz-rar
         trash-cli
