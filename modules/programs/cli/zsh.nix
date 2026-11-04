@@ -58,7 +58,6 @@
               save = 100000;
               extended = true;
               expireDuplicatesFirst = true;
-              ignoreDups = true;
               ignoreAllDups = true;
               ignoreSpace = true;
               share = true;
@@ -107,7 +106,7 @@
               "--border=rounded"
               "--info=inline"
             ];
-          };
+	  };
 
           atuin = {
             enable = true;

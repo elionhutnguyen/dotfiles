@@ -1,9 +1,13 @@
+# modules/hosts/elio/default.nix
 { den, ... }:
 {
   # 1. Host Entity Declaration
   den.hosts.x86_64-linux.elio-laptop = {
     users.elio = {
-      classes = [ "homeManager" "user" ];
+      classes = [
+        "homeManager"
+        "user"
+      ];
     };
   };
 
@@ -18,17 +22,7 @@
     ];
   };
 
-  # 3. User Group Assignments
-  den.aspects.elio.user.extraGroups = [
-    "wheel"
-    "audio"
-    "video"
-    "input"
-    "dialout"
-    "networkmanager"
-  ];
-
-  # 4. Master Aspect Inclusions
+  # 3. Master Aspect Inclusions
   den.aspects.elio-laptop.includes = with den.aspects; [
     # Core & System
     nix

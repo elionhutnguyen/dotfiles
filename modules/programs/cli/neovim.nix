@@ -66,7 +66,7 @@
                 # Search & Telescope dependencies
                 ripgrep
                 fd
-
+		trash-cli
                 # Nix toolchain
                 nixd
                 nixfmt

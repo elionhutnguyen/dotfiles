@@ -11,7 +11,7 @@
     homeManager =
       {
         config,
-        osConfig,
+        osConfig ? { },
         lib,
         ...
       }:

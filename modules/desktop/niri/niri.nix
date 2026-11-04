@@ -1,63 +1,82 @@
+# modules/desktop/niri/niri.nix
 { ... }:
 {
   den.aspects.niri = {
-    nixos = { pkgs, ... }: {
-      programs.niri = {
-        enable = true;
-        useNautilus = false;
-      };
+    nixos =
+      { pkgs, ... }:
+      {
+        programs.niri = {
+          enable = true;
+          useNautilus = false;
+        };
 
-      # XWayland satellite daemon
-      programs.xwayland.enable = true;
-      environment.systemPackages = [
-        pkgs.xwayland-satellite
-        pkgs.brightnessctl
-        pkgs.swaylock
-      ];
+        # XWayland satellite daemon & keybinding CLI dependencies
+        programs.xwayland.enable = true;
+        environment.systemPackages = with pkgs; [
+          xwayland-satellite
+          brightnessctl
+          playerctl
+          wireplumber
+          swaylock
+        ];
 
-      # PAM authentication for swaylock
-      security.pam.services.swaylock = {};
+        # PAM authentication for swaylock
+        security.pam.services.swaylock = { };
 
-      # Display manager session definition
-      services.greetd = {
-        enable = true;
-        settings = {
-          default_session = {
-            command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${pkgs.niri}/bin/niri-session";
-            user = "greeter";
+        # Display manager session definition
+        services.greetd = {
+          enable = true;
+          settings = {
+            default_session = {
+              command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${pkgs.niri}/bin/niri-session";
+              user = "greeter";
+            };
           };
+        };
+
+        systemd.services.greetd.serviceConfig = {
+          Type = "idle";
+          StandardInput = "tty";
+          StandardOutput = "tty";
+          StandardError = "journal";
+          TTYReset = true;
+          TTYVHangup = true;
+          TTYVTDisallocate = true;
+        };
+
+        # Shell daemon for Niri
+        programs.noctalia = {
+          enable = true;
+          systemd.enable = true;
+          recommendedServices.enable = true;
+        };
+
+        # Portal routing for Niri session
+        xdg.portal.config.niri = {
+          default = [
+            "gnome"
+            "gtk"
+          ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
         };
       };
 
-      systemd.services.greetd.serviceConfig = {
-        Type = "idle";
-        StandardInput = "tty";
-        StandardOutput = "tty";
-        StandardError = "journal";
-        TTYReset = true;
-        TTYVHangup = true;
-        TTYVTDisallocate = true;
-      };
-
-      # Shell daemon for Niri
-      programs.noctalia = {
-        enable = true;
-        systemd.enable = true;
-        recommendedServices.enable = true;
-      };
-
-      # Portal routing for Niri session
-      xdg.portal.config.niri = {
-        default = [ "gnome" "gtk" ];
-        "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
-        "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
-        "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
-      };
-    };
-
-    homeManager = { config, pkgs, ... }:
+    homeManager =
+      { pkgs, ... }:
       let
-        sliceDir = "${config.home.homeDirectory}/dotfiles/modules/desktop/niri";
+        # Validate config.kdl at Nix build time so invalid KDL syntax fails
+        # `nix flake check` before ever reaching a live session.
+        validatedNiriConfig =
+          pkgs.runCommand "niri-config.kdl"
+            {
+              nativeBuildInputs = [ pkgs.niri ];
+            }
+            ''
+              niri validate -c ${./config/config.kdl}
+              cp ${./config/config.kdl} $out
+            '';
       in
       {
         # Integrated launcher for Niri
@@ -92,9 +111,8 @@
           longitude = "121.56";
         };
 
-        # Out-of-store config symlink
-        xdg.configFile."niri".source =
-          config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
+        # Hermetic, build-validated Niri configuration
+        xdg.configFile."niri/config.kdl".source = validatedNiriConfig;
       };
   };
 }

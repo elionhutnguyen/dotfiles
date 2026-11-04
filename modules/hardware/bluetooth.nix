@@ -1,3 +1,4 @@
+# modules/hardware/bluetooth.nix
 { ... }:
 {
   den.aspects.bluetooth.nixos = {
@@ -5,6 +6,5 @@
       enable = true;
       powerOnBoot = true;
     };
-    services.blueman.enable = true;
   };
 }

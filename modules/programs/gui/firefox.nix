@@ -1,3 +1,4 @@
+# modules/programs/gui/firefox.nix
 { ... }:
 {
   den.aspects.firefox.homeManager = {
@@ -6,8 +7,8 @@
       policies = {
         HardwareAcceleration = true;
         # 1. NixOS Compatibility & Update Suppression
-        DisableAppUpdate = true;     
-        DisableSystemAddonUpdate = true;  
+        DisableAppUpdate = true;
+        DisableSystemAddonUpdate = true;
         DisableProfileRefresh = true;
 
         # 2. Baseline Telemetry & Experiments
@@ -41,9 +42,9 @@
           SponsoredTopSites = false;
           Highlights = true;
           Pocket = false;
-          Stories = true;
+          Stories = false;
           SponsoredPocket = false;
-          SponsoredStories = true;
+          SponsoredStories = false;
           Snippets = false;
           Locked = true;
         };
@@ -53,7 +54,7 @@
           UrlbarInterventions = false;
           SkipOnboarding = true;
           MoreFromMozilla = false;
-          FirefoxLabs = true;
+          FirefoxLabs = false;
           Locked = true;
         };
 
@@ -69,7 +70,11 @@
             }
           ];
           Default = "Brave";
-          Remove = [ "Bing" "Amazon.com" "eBay" ];
+          Remove = [
+            "Bing"
+            "Amazon.com"
+            "eBay"
+          ];
         };
 
         # 6. Security, DoH, and Encryption
@@ -95,13 +100,13 @@
           ConvenienceExceptions = true;
         };
 
-        # 8. Network Hygiene & AI Blocking
+        # 8. Network Hygiene & AI Blocking (All sub-keys set to false)
         NetworkPrediction = false;
         GenerativeAI = {
           Enabled = false;
-          Chatbot = true;
-          LinkPreviews = true;
-          TabGroups = true;
+          Chatbot = false;
+          LinkPreviews = false;
+          TabGroups = false;
           Locked = true;
         };
 

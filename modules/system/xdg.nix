@@ -2,40 +2,41 @@
 { ... }:
 {
   den.aspects.xdg = {
-    nixos = {
-      environment.sessionVariables = {
-        # Core XDG Base Specifications
-        XDG_CONFIG_HOME = "$HOME/.config";
-        XDG_CACHE_HOME = "$HOME/.cache";
-        XDG_DATA_HOME = "$HOME/.local/share";
-        XDG_STATE_HOME = "$HOME/.local/state";
-
-        # Clean $HOME from language runtimes & dev tools
-        NPM_CONFIG_USERCONFIG = "$HOME/.config/npm/npmrc";
-        NODE_REPL_HISTORY = "$HOME/.local/state/node_repl_history";
-        CARGO_HOME = "$HOME/.local/share/cargo";
-        RUSTUP_HOME = "$HOME/.local/share/rustup";
-        GOPATH = "$HOME/.local/share/go";
-        GNUPGHOME = "$HOME/.local/share/gnupg";
-        CUDA_CACHE_PATH = "$HOME/.cache/nv";
-        DOCKER_CONFIG = "$HOME/.config/docker";
-        WGETRC = "$HOME/.config/wget/wgetrc";
-      };
-    };
-
     homeManager =
       { config, ... }:
       {
+        home.preferXdgDirectories = true;
+
         xdg = {
           enable = true;
           configHome = "${config.home.homeDirectory}/.config";
           cacheHome = "${config.home.homeDirectory}/.cache";
           dataHome = "${config.home.homeDirectory}/.local/share";
           stateHome = "${config.home.homeDirectory}/.local/state";
+
+          userDirs = {
+            enable = true;
+            createDirectories = false;
+            setSessionVariables = false;
+          };
+        };
+
+        # Resolved absolute XDG paths (avoids literal "$HOME" bugs in PAM sessionVariables)
+        home.sessionVariables = {
+          NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
+          NODE_REPL_HISTORY = "${config.xdg.stateHome}/node_repl_history";
+          CARGO_HOME = "${config.xdg.dataHome}/cargo";
+          RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
+          GOPATH = "${config.xdg.dataHome}/go";
+          GNUPGHOME = "${config.xdg.dataHome}/gnupg";
+          CUDA_CACHE_PATH = "${config.xdg.cacheHome}/nv";
+          DOCKER_CONFIG = "${config.xdg.configHome}/docker";
+          WGETRC = "${config.xdg.configHome}/wget/wgetrc";
         };
 
         systemd.user.tmpfiles.rules = [
           "d %h/.config/npm 0755 - - - -"
+          "d %h/.local/share/gnupg 0700 - - - -"
         ];
       };
   };
