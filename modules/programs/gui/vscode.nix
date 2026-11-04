@@ -21,9 +21,5 @@
           ];
         };
       };
-
-      # Out-of-store directory symlink for VS Code configuration
-      xdg.configFile."Code/User".source =
-        config.lib.file.mkOutOfStoreSymlink "${sliceDir}/config";
     };
 }

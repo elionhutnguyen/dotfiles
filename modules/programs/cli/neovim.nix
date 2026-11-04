@@ -2,7 +2,6 @@
 { ... }:
 {
   den.aspects.neovim =
-    { host, user }:
     {
       # ========================================================================
       # NixOS System Class: Default System Editor Variables

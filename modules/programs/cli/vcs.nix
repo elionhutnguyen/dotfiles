@@ -1,38 +1,29 @@
 # aspects/vcs.nix
 { ... }:
 {
-  den.aspects.vcs =
-    { host, user }:
-    let
-      gitUserName = user.fullName or user.userName;
-      gitUserEmail = user.email or "${user.userName}@${host.hostName}";
-      sshSigningKey = user.sshPublicKey or "~/.ssh/id_ed25519.pub";
-    in
-    {
-      # ========================================================================
-      # NixOS System Class: Base System Git
-      # ========================================================================
-      nixos =
-        { ... }:
-        {
-          programs.git.enable = true;
-        };
+  den.aspects.vcs = {
+    nixos =
+      { ... }:
+      {
+        programs.git.enable = true;
+      };
 
-      # ========================================================================
-      # Home Manager User Class: Unified Terminal-Native VCS Stack
-      # ========================================================================
-      homeManager =
-        {
-          config,
-          lib,
-          pkgs,
-          ...
-        }:
-        let
-          deltaExe = lib.getExe config.programs.delta.package;
-          difftExe = lib.getExe config.programs.difftastic.package;
-        in
-        {
+    homeManager =
+      {
+        config,
+        osConfig,
+        lib,
+        pkgs,
+        ...
+      }:
+      let
+        gitUserName = config.home.username;
+        gitUserEmail = "${config.home.username}@${osConfig.networking.hostName}";
+        sshSigningKey = "~/.ssh/id_ed25519.pub";
+        deltaExe = lib.getExe config.programs.delta.package;
+        difftExe = lib.getExe config.programs.difftastic.package;
+      in        
+      {
           programs = {
             # ------------------------------------------------------------------
             # 1. Delta (Default Line-Oriented Syntax-Highlighting Pager)
