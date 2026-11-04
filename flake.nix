@@ -1,13 +1,13 @@
 {
-  description = "Elio Flake Configuration";
+  description = "Elio Flake Configuration (Strict Autonomous Hybrid Module + Aspect Architecture)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     import-tree.url = "github:vic/import-tree";
     den.url = "github:denful/den";
     flake-parts = {
-          url = "github:hercules-ci/flake-parts";
-          inputs.nixpkgs-lib.follows = "nixpkgs";
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -15,11 +15,14 @@
     };
   };
 
-  outputs = inputs:
+  outputs =
+    inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.den.flakeModule
         (inputs.import-tree ./modules)
+        (inputs.import-tree ./aspects)
+        (inputs.import-tree ./hosts)
       ];
     };
 }
