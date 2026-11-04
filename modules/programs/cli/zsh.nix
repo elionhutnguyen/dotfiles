@@ -96,6 +96,7 @@
           fzf = {
             enable = true;
             enableZshIntegration = true;
+	    historyWidget.command = "";
             defaultOptions = [
               "--height=40%"
               "--layout=reverse"

@@ -1,10 +1,9 @@
+# modules/programs/cli/cli-tools.nix
 { ... }:
 {
-  den.aspects.cli-tools = { 
-    nixos = {
-      programs.git.enable = true;
-    };
-    homeManager = { pkgs, ... }: {
+  den.aspects.cli-tools.homeManager =
+    { pkgs, ... }:
+    {
       programs.ripgrep.enable = true;
       programs.fd.enable = true;
       programs.btop.enable = true;
@@ -22,5 +21,4 @@
         nvtopPackages.full
       ];
     };
-  };
 }
