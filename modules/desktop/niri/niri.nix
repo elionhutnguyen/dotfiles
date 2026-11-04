@@ -17,6 +17,42 @@
 
       # PAM authentication for swaylock
       security.pam.services.swaylock = {};
+
+      # Display manager session definition
+      services.greetd = {
+        enable = true;
+        settings = {
+          default_session = {
+            command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${pkgs.niri}/bin/niri-session";
+            user = "greeter";
+          };
+        };
+      };
+
+      systemd.services.greetd.serviceConfig = {
+        Type = "idle";
+        StandardInput = "tty";
+        StandardOutput = "tty";
+        StandardError = "journal";
+        TTYReset = true;
+        TTYVHangup = true;
+        TTYVTDisallocate = true;
+      };
+
+      # Shell daemon for Niri
+      programs.noctalia = {
+        enable = true;
+        systemd.enable = true;
+        recommendedServices.enable = true;
+      };
+
+      # Portal routing for Niri session
+      xdg.portal.config.niri = {
+        default = [ "gnome" "gtk" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+        "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+      };
     };
 
     homeManager = { config, pkgs, ... }:
@@ -24,6 +60,12 @@
         sliceDir = "${config.home.homeDirectory}/dotfiles/modules/desktop/niri";
       in
       {
+        # Integrated launcher for Niri
+        programs.vicinae = {
+          enable = true;
+          systemd.enable = true;
+        };
+
         # Swayidle integration
         services.swayidle = {
           enable = true;

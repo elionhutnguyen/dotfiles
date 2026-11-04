@@ -12,8 +12,6 @@
       home.packages = with pkgs; [
         uv
         python3
-        # Archives & File Management
-        _7zz-rar
         trash-cli
 
         # System Inspection & Monitors
@@ -22,13 +20,6 @@
         pciutils
         usbutils
         nvtopPackages.full
-
-        # Yazi Terminal Media & Document Previews
-        ffmpegthumbnailer
-        poppler-utils
-        imagemagick
-        mediainfo
-        exiftool
       ];
     };
   };

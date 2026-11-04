@@ -7,9 +7,15 @@
     };
   };
 
-  # 2. Hardware Specification
+  # 2. Hardware Specification & Host-Specific Storage
   den.aspects.elio-laptop.nixos = {
     imports = [ ./_hardware-configuration.nix ];
+
+    # Host-specific data partition permissions
+    systemd.tmpfiles.rules = [
+      "d /home/data 0775 elio users -"
+      "z /home/data 0775 elio users -"
+    ];
   };
 
   # 3. User Group Assignments
@@ -40,20 +46,18 @@
     bluetooth
 
     # Desktop & Wayland Session
-    greetd
     desktop-env
     niri
-    noctalia
-    vicinae
 
     # CLI & Terminal Tools
+    vcs
     zsh
     cli-tools
     ghostty
     neovim
     yazi
     vscode
-    ai
+    goose
 
     # GUI Applications
     gui-apps

@@ -9,5 +9,14 @@
         _7zz = pkgs._7zz-rar;
       };
     };
+
+    # Localized preview and document dependencies
+    home.packages = with pkgs; [
+      ffmpegthumbnailer
+      poppler-utils
+      imagemagick
+      mediainfo
+      exiftool
+    ];
   };
 }
