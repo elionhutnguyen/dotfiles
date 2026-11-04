@@ -1,9 +1,6 @@
 { ... }:
 {
   den.aspects.vscode.homeManager = { config, pkgs, ... }: 
-    let
-      sliceDir = "${config.home.homeDirectory}/dotfiles/modules/programs/gui/vscode";
-    in
     {
       programs.vscode = {
         enable = true;

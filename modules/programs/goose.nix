@@ -2,9 +2,6 @@
 {
   den.aspects.goose = {
     homeManager = { config, pkgs, ... }:
-      let
-        baseDir = "${config.home.homeDirectory}/dotfiles/modules/programs/ai";
-      in
       {
         # Install CLI Agent Binaries
         home.packages = with pkgs; [

@@ -9,7 +9,7 @@
         environment.pathsToLink = [ "/share/zsh" ];
       };
 
-    # Projected to `users.users.elio.shell` via `den.batteries.host-aspects`
+    # Projected to `users.users.<name>.shell` via `den.batteries.host-aspects`
     user =
       { pkgs, ... }:
       {
@@ -28,10 +28,15 @@
           pkgs.zsh-completions
         ];
 
+        # Self-contained XDG state and cache directories for Zsh
+        systemd.user.tmpfiles.rules = [
+          "d %h/.local/state/zsh 0700 - - - -"
+          "d %h/.cache/zsh 0700 - - - -"
+        ];
+
         programs = {
           zsh = {
             enable = true;
-            # Match ZDOTDIR="$HOME/.config/zsh" in modules/system/xdg.nix
             dotDir = "${config.xdg.configHome}/zsh";
             enableCompletion = true;
             defaultKeymap = "emacs";
@@ -48,7 +53,6 @@
             syntaxHighlighting.enable = false;
 
             history = {
-              # Match HISTFILE="$HOME/.local/state/zsh/history" in modules/system/xdg.nix
               path = "${config.xdg.stateHome}/zsh/history";
               size = 100000;
               save = 100000;
@@ -96,8 +100,8 @@
           fzf = {
             enable = true;
             enableZshIntegration = true;
-	    historyWidget.command = "";
-            defaultOptions = [
+            historyWidget.command = "";
+	    defaultOptions = [
               "--height=40%"
               "--layout=reverse"
               "--border=rounded"

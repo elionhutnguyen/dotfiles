@@ -13,21 +13,20 @@
         config,
         osConfig,
         lib,
-        pkgs,
         ...
       }:
       let
         gitUserName = config.home.username;
         gitUserEmail = "${config.home.username}@${osConfig.networking.hostName}";
-        sshSigningKey = "~/.ssh/id_ed25519.pub";
+        sshSigningKey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
         deltaExe = lib.getExe config.programs.delta.package;
         difftExe = lib.getExe config.programs.difftastic.package;
       in
       {
         programs = {
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           # 1. Delta (Default Line-Oriented Syntax-Highlighting Pager)
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           delta = {
             enable = true;
             enableGitIntegration = true;
@@ -47,9 +46,9 @@
             };
           };
 
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           # 2. Difftastic (Tree-Sitter AST Structural Diff Engine)
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           difftastic = {
             enable = true;
             git.enable = false;
@@ -60,13 +59,12 @@
             };
           };
 
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           # 3. Git (Foundational Storage & Porcelain)
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           git = {
             enable = true;
 
-            # SSH Commit Signing
             signing = {
               format = "ssh";
               key = sshSigningKey;
@@ -132,12 +130,10 @@
               help.autocorrect = "prompt";
 
               alias = {
-                # On-demand AST structural diffs via Difftastic
                 dft = "-c diff.external=${difftExe} diff";
                 dshow = "-c diff.external=${difftExe} show --ext-diff";
                 dlog = "-c diff.external=${difftExe} log -p --ext-diff";
 
-                # Ergonomic inspection aliases
                 st = "status -sb";
                 lg = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'";
                 unstage = "restore --staged";
@@ -145,9 +141,9 @@
             };
           };
 
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           # 4. Jujutsu (`jj` - Colocated Next-Gen VCS)
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           jujutsu = {
             enable = true;
             settings = {
@@ -199,9 +195,9 @@
             };
           };
 
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           # 5. Lazygit (Terminal UI with Delta <-> Difftastic Pager Cycling)
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           lazygit = {
             enable = true;
             settings = {
@@ -225,9 +221,9 @@
             };
           };
 
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           # 6. GitHub CLI (`gh`)
-          # ------------------------------------------------------------------
+          # --------------------------------------------------------------------
           gh = {
             enable = true;
             gitCredentialHelper.enable = true;
