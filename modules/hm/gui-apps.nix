@@ -1,7 +1,6 @@
 # modules/hm/gui-apps.nix
 # Vertical Module: Desktop productivity, browser, messaging & office applications
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,
@@ -18,10 +17,12 @@
       };
 
       config = lib.mkIf cfg.enable {
-        home.packages = with pkgs; [
-          anki-bin
-          brave-origin
-          materialgram
+        home.packages = [
+          pkgs.anki-bin
+          (pkgs.brave-origin.override {
+            commandLineArgs = "--disable-accelerated-video-encode";
+          })
+          pkgs.materialgram
         ];
 
         programs.onlyoffice.enable = true;

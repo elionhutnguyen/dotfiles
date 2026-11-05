@@ -1,7 +1,6 @@
 # modules/hm/noctalia.nix
 # Vertical Module: Noctalia v5 Wayland desktop shell, night light, polkit & idle manager
-{ ... }:
-{
+_: {
   den.default.homeManager =
     { config, lib, ... }:
     let
@@ -75,8 +74,8 @@
             };
             location = {
               auto_locate = false;
-              latitude = cfg.latitude;
-              longitude = cfg.longitude;
+              inherit (cfg) latitude;
+              inherit (cfg) longitude;
             };
             nightlight = {
               enabled = cfg.nightlightEnable;

@@ -1,7 +1,6 @@
 # modules/nixos/bluetooth.nix
 # Vertical Module: System Bluetooth controller stack
-{ ... }:
-{
+_: {
   den.default.nixos =
     { config, lib, ... }:
     let
@@ -21,7 +20,7 @@
       config = lib.mkIf cfg.enable {
         hardware.bluetooth = {
           enable = true;
-          powerOnBoot = cfg.powerOnBoot;
+          inherit (cfg) powerOnBoot;
         };
       };
     };

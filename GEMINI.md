@@ -27,4 +27,4 @@ Discipline: Write the smallest working diff (YAGNI). Zero speculative abstractio
 4. **Post-Change Cohesion & Deduplication Audit (Mandatory After Every Edit):**
    - **Cooperation:** Verify modified tools interoperate cleanly (integrations, daemons, ports, keybinds) via Aspect pushes without conflicts.
    - **Prune & Deduplicate:** Enforce one tool per category, strip duplicate `nixos`/`homeManager` settings, and run `rg` after removals/renames to clear dangling `my.*` or aspect references.
-   - **Verify:** Run fast checks (`statix check`, `deadnix`, `nixfmt --check`, `nix flake check --no-build`).
+   - **Verify:** Run fast checks (`statix check`, `deadnix`, `fd -e nix -X nixfmt --check`, `nix flake check --no-build`).

@@ -1,7 +1,6 @@
 # modules/hm/yazi.nix
 # Vertical Module: Yazi terminal file manager & rich media previewers
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,
@@ -27,7 +26,7 @@
         programs.yazi = {
           enable = true;
           enableZshIntegration = true;
-          shellWrapperName = cfg.shellWrapperName;
+          inherit (cfg) shellWrapperName;
           package = pkgs.yazi.override {
             _7zz = pkgs._7zz-rar;
           };

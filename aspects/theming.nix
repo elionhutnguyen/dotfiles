@@ -1,6 +1,6 @@
 # aspects/theming.nix
 # Horizontal Aspect: Cross-cutting typography & TokyoNight palette pushed outward to oblivious modules
-{ ... }:
+_:
 let
   monoFont = "JetBrainsMono Nerd Font";
   fontSize = 12;
@@ -40,36 +40,38 @@ in
     homeManager =
       { pkgs, ... }:
       {
-        my.noctalia = {
-          fontFamily = "Noto Sans";
-          theme = "Tokyo-Night";
-        };
+        my = {
+          noctalia = {
+            fontFamily = "Noto Sans";
+            theme = "Tokyo-Night";
+          };
 
-        my.cli-tools.btopTheme = "tokyo-night";
+          cli-tools.btopTheme = "tokyo-night";
 
-        my.niri = {
-          activeBorderColor = "#7aa2f7";
-          inactiveBorderColor = "#24283b";
-        };
+          niri = {
+            activeBorderColor = "#7aa2f7";
+            inactiveBorderColor = "#24283b";
+          };
 
-        my.ghostty = {
-          fontFamily = monoFont;
-          fontSize = fontSize;
-          theme = "TokyoNight Night";
-        };
+          ghostty = {
+            fontFamily = monoFont;
+            inherit fontSize;
+            theme = "TokyoNight Night";
+          };
 
-        my.neovim = {
-          fontFamily = monoFont;
-          fontSize = fontSize;
-          colorscheme = "tokyonight-night";
-        };
+          neovim = {
+            fontFamily = monoFont;
+            inherit fontSize;
+            colorscheme = "tokyonight-night";
+          };
 
-        my.vcs = {
-          deltaTheme = "ansi";
-        };
+          vcs = {
+            deltaTheme = "ansi";
+          };
 
-        my.antigravity = {
-          colorScheme = "tokyo night";
+          antigravity = {
+            colorScheme = "tokyo night";
+          };
         };
 
         dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";

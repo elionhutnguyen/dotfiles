@@ -1,6 +1,6 @@
 # aspects/locale.nix
 # Horizontal Aspect: Cross-class localization, CJK/Vietnamese input method & Taipei solar coordinates
-{ ... }:
+_:
 let
   defaultLocale = "en_GB.UTF-8";
 in

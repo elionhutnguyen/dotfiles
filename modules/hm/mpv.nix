@@ -1,7 +1,6 @@
 # modules/hm/mpv.nix
 # Vertical Module: GPU-next Wayland MPV media player with uosc & sponsorblock
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,

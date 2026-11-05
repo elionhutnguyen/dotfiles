@@ -1,7 +1,6 @@
 # aspects/desktop.nix
 # Horizontal Aspect: Multi-class Wayland desktop glue (Niri, Noctalia, PAM Keyring)
-{ ... }:
-{
+_: {
   den.aspects.desktop = {
     nixos =
       { pkgs, ... }:

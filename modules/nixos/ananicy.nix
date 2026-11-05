@@ -1,7 +1,6 @@
 # modules/nixos/ananicy.nix
 # Vertical Module: Ananicy-cpp process nice/scheduler auto-tuning daemon
-{ ... }:
-{
+_: {
   den.default.nixos =
     {
       config,

@@ -1,7 +1,6 @@
 # modules/nixos/niri-system.nix
 # Vertical Module: System-level Niri compositor, Greetd display manager & portal override
-{ ... }:
-{
+_: {
   den.default.nixos =
     {
       config,

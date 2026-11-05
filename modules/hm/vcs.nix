@@ -1,7 +1,6 @@
 # modules/hm/vcs.nix
 # Vertical Module: Git, Jujutsu, Delta, Difftastic, Lazygit & GH (100% user-oblivious options)
-{ ... }:
-{
+_: {
   den.default.homeManager =
     { config, lib, ... }:
     let
@@ -45,7 +44,19 @@
       };
 
       config = lib.mkIf cfg.enable {
+        services.ssh-agent.enable = true;
+
         programs = {
+          ssh = {
+            enable = true;
+            enableDefaultConfig = false;
+            settings = {
+              "*" = {
+                AddKeysToAgent = "yes";
+              };
+            };
+          };
+
           delta = {
             enable = true;
             enableGitIntegration = true;
@@ -99,11 +110,15 @@
                 email = cfg.userEmail;
               };
 
+              url."git@github.com:".insteadOf = [
+                "https://github.com/"
+                "ssh://git@github.com/"
+              ];
+
               init.defaultBranch = "main";
               core = {
-                editor = cfg.editor;
+                inherit (cfg) editor;
                 autocrlf = "input";
-                fsmonitor = true;
                 untrackedCache = true;
               };
 
@@ -164,7 +179,7 @@
 
               ui = {
                 default-command = "log";
-                editor = cfg.editor;
+                inherit (cfg) editor;
               };
 
               git = {
@@ -234,7 +249,7 @@
             gitCredentialHelper.enable = true;
             settings = {
               git_protocol = "ssh";
-              editor = cfg.editor;
+              inherit (cfg) editor;
               prompt = "enabled";
             };
           };

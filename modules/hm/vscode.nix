@@ -1,7 +1,6 @@
 # modules/hm/vscode.nix
 # Vertical Module: VSCode editor with zero-token Supermaven inline completion
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,

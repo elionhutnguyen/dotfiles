@@ -1,7 +1,6 @@
 # aspects/cli-workspace.nix
 # Horizontal Aspect: Cross-class CLI environment weaving (nixos, user, homeManager)
-{ ... }:
-{
+_: {
   den.aspects.cli-workspace = {
     nixos = {
       programs.zsh.enable = true;
@@ -15,15 +14,17 @@
       };
 
     homeManager = {
-      my.zsh.enable = true;
-      my.neovim.enable = true;
-      my.vcs = {
-        enable = true;
-        editor = "nvim";
+      my = {
+        zsh.enable = true;
+        neovim.enable = true;
+        vcs = {
+          enable = true;
+          editor = "nvim";
+        };
+        yazi.enable = true;
+        cli-tools.enable = true;
+        python.enable = true;
       };
-      my.yazi.enable = true;
-      my.cli-tools.enable = true;
-      my.python.enable = true;
     };
   };
 }

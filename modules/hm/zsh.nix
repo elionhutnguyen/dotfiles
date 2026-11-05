@@ -1,7 +1,6 @@
 # modules/hm/zsh.nix
 # Vertical Module: User-level Zsh shell with fzf-tab, Atuin, Zoxide, and Starship
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,

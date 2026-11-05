@@ -1,7 +1,6 @@
 # modules/hm/ghostty.nix
 # Vertical Module: Ghostty GPU-accelerated terminal emulator
-{ ... }:
-{
+_: {
   den.default.homeManager =
     { config, lib, ... }:
     let
@@ -38,7 +37,7 @@
           settings = {
             font-family = cfg.fontFamily;
             font-size = cfg.fontSize;
-            theme = cfg.theme;
+            inherit (cfg) theme;
             window-decoration = false;
             confirm-close-surface = false;
           };

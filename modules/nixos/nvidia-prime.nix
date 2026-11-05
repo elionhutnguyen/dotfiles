@@ -1,7 +1,6 @@
 # modules/nixos/nvidia-prime.nix
 # Vertical Module: NVIDIA PRIME offload, VAAPI acceleration & cardwired eBPF switching
-{ ... }:
-{
+_: {
   den.default.nixos =
     {
       config,
@@ -55,33 +54,35 @@
           }
         ];
 
-        hardware.enableRedistributableFirmware = true;
+        hardware = {
+          enableRedistributableFirmware = true;
 
-        hardware.graphics = {
-          enable = true;
-          enable32Bit = true;
-          extraPackages = with pkgs; [
-            nvidia-vaapi-driver
-          ];
+          graphics = {
+            enable = true;
+            enable32Bit = true;
+            extraPackages = with pkgs; [
+              nvidia-vaapi-driver
+            ];
+          };
+
+          nvidia = {
+            modesetting.enable = true;
+            powerManagement.enable = true;
+            powerManagement.finegrained = true;
+            inherit (cfg) open;
+            nvidiaSettings = true;
+
+            prime = {
+              offload.enable = true;
+              offload.enableOffloadCmd = true;
+              inherit (cfg) nvidiaBusId;
+              amdgpuBusId = lib.mkIf (cfg.amdgpuBusId != "") cfg.amdgpuBusId;
+              intelBusId = lib.mkIf (cfg.intelBusId != "") cfg.intelBusId;
+            };
+          };
         };
 
         services.xserver.videoDrivers = [ "nvidia" ];
-
-        hardware.nvidia = {
-          modesetting.enable = true;
-          powerManagement.enable = true;
-          powerManagement.finegrained = true;
-          open = cfg.open;
-          nvidiaSettings = true;
-
-          prime = {
-            offload.enable = true;
-            offload.enableOffloadCmd = true;
-            nvidiaBusId = cfg.nvidiaBusId;
-            amdgpuBusId = lib.mkIf (cfg.amdgpuBusId != "") cfg.amdgpuBusId;
-            intelBusId = lib.mkIf (cfg.intelBusId != "") cfg.intelBusId;
-          };
-        };
 
         services.cardwired = lib.mkIf cfg.cardwiredEnable {
           enable = true;

@@ -1,7 +1,6 @@
 # modules/nixos/nix-daemon.nix
 # Vertical Module: Nix daemon, NH helper, store optimisation, GC & nix-ld
-{ ... }:
-{
+_: {
   den.default.nixos =
     {
       config,

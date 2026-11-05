@@ -1,7 +1,6 @@
 # modules/hm/cli-tools.nix
 # Vertical Module: Core CLI search, system monitor, Nix static analysis, and trash utilities
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,
@@ -24,16 +23,18 @@
       };
 
       config = lib.mkIf cfg.enable {
-        programs.ripgrep.enable = true;
-        programs.fd.enable = true;
-        programs.btop = {
-          enable = true;
-          settings.color_theme = cfg.btopTheme;
-        };
-        programs.direnv = {
-          enable = true;
-          nix-direnv.enable = true;
-          enableZshIntegration = true;
+        programs = {
+          ripgrep.enable = true;
+          fd.enable = true;
+          btop = {
+            enable = true;
+            settings.color_theme = cfg.btopTheme;
+          };
+          direnv = {
+            enable = true;
+            nix-direnv.enable = true;
+            enableZshIntegration = true;
+          };
         };
 
         home.packages = with pkgs; [

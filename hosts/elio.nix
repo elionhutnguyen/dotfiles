@@ -3,23 +3,23 @@
 { den, ... }:
 {
   den.aspects.elio = {
-    homeManager = {
+    homeManager.my = {
       # Supply user identity directly to the vertical `vcs` module's local options
-      my.vcs = {
+      vcs = {
         userName = "elionhutnguyen";
         userEmail = "elio.nhutnguyen@gmail.com";
       };
 
       # Primary AI Coding Assistant (Google Antigravity CLI)
-      my.antigravity.enable = true;
+      antigravity.enable = true;
 
       # Personal GUI, Terminal & Diagnostic Vertical Modules
-      my.ghostty.enable = true;
-      my.vscode.enable = true;
-      my.gui-apps.enable = true;
-      my.firefox.enable = true;
-      my.mpv.enable = true;
-      my.hw-diag.enable = true;
+      ghostty.enable = true;
+      vscode.enable = true;
+      gui-apps.enable = true;
+      firefox.enable = true;
+      mpv.enable = true;
+      hw-diag.enable = true;
     };
 
     # Include genuine multi-class user aspects

@@ -1,7 +1,6 @@
 # aspects/gaming.nix
 # Horizontal Aspect: Cross-class gaming runtime & GTK2 deprecation handler
-{ ... }:
-{
+_: {
   den.aspects.gaming = {
     nixos = {
       nixpkgs.config.problems.handlers = {

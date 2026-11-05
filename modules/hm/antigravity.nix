@@ -1,7 +1,6 @@
 # modules/hm/antigravity.nix
 # Vertical Module: Google Antigravity CLI (`agy`) tuned for Google AI Pro efficiency
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,
@@ -18,19 +17,19 @@
 
         defaultModel = lib.mkOption {
           type = lib.types.str;
-          default = "gemini-4-argon-medium";
+          default = "Gemini 4 Argon (Medium)";
           description = "Balanced default model ID for daily coding and interactive sessions.";
         };
 
         highEffortModel = lib.mkOption {
           type = lib.types.str;
-          default = "gemini-4-argon-high";
+          default = "Gemini 4 Argon (High)";
           description = "High-reasoning model ID reserved for complex multi-file architecture (`agy-high`).";
         };
 
         fastModel = lib.mkOption {
           type = lib.types.str;
-          default = "gemini-4-argon-low";
+          default = "Gemini 4 Argon (Low)";
           description = "Low-latency, low-token model ID for quick general Q&A and one-liners (`agy-fast`).";
         };
 
@@ -38,6 +37,12 @@
           type = lib.types.bool;
           default = true;
           description = "Install tiered shell aliases (`agy-high`, `agy-fast`) for quota-aware model switching.";
+        };
+
+        enableAccountSwitcher = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Install agy-acct helper to switch Google AI Pro OAuth tokens in gnome-keyring.";
         };
 
         colorScheme = lib.mkOption {
@@ -48,7 +53,7 @@
 
         enableTerminalSandbox = lib.mkOption {
           type = lib.types.bool;
-          default = true;
+          default = false;
           description = "Run terminal commands inside Antigravity's OS containment sandbox.";
         };
 
@@ -59,7 +64,7 @@
             "strict"
             "always-proceed"
           ];
-          default = "proceed-in-sandbox";
+          default = "request-review";
           description = "Global tool-approval preset for local commands and edits.";
         };
 
@@ -80,8 +85,7 @@
         programs.antigravity-cli = {
           enable = true;
           package = pkgs.antigravity-cli;
-          defaultModel = cfg.defaultModel;
-          enableMcpIntegration = cfg.enableMcpIntegration;
+          inherit (cfg) defaultModel enableMcpIntegration;
 
           # Merge declarative settings into a writable file on activation so
           # Google AI Pro OAuth sign-in can persist auth state in settings.json.
@@ -89,22 +93,82 @@
 
           settings = {
             model = cfg.defaultModel;
-            colorScheme = cfg.colorScheme;
+            inherit (cfg) colorScheme enableTerminalSandbox toolPermission;
             altScreenMode = "always";
-            enableTerminalSandbox = cfg.enableTerminalSandbox;
-            toolPermission = cfg.toolPermission;
             artifactReviewPolicy = "agent-decides";
             showTips = false;
             showFeedbackSurvey = false;
           };
         };
 
-        home.shellAliases = lib.mkIf cfg.enableShellAliases {
-          agy-high = "agy --model ${cfg.highEffortModel}";
-          agy-fast = "agy --model ${cfg.fastModel}";
-        };
+        home.shellAliases = lib.mkIf cfg.enableShellAliases (
+          {
+            agy-high = "agy --model \"${cfg.highEffortModel}\"";
+            agy-fast = "agy --model \"${cfg.fastModel}\"";
+          }
+          // lib.optionalAttrs cfg.enableAccountSwitcher {
+            agy-1 = "agy-acct use acct1";
+            agy-2 = "agy-acct use acct2";
+          }
+        );
 
-        home.packages = lib.optional cfg.enableGui pkgs.antigravity;
+        home.packages =
+          lib.optional cfg.enableGui pkgs.antigravity
+          ++ lib.optional cfg.enableAccountSwitcher (
+            pkgs.writeShellApplication {
+              name = "agy-acct";
+              runtimeInputs = [
+                pkgs.libsecret
+                pkgs.procps
+              ];
+              text = ''
+                usage() {
+                  echo "Usage: agy-acct <save|use|list|current> [slot-name]"
+                  exit 1
+                }
+                cmd="''${1:-}"
+                slot="''${2:-}"
+                case "$cmd" in
+                  save)
+                    [ -z "$slot" ] && usage
+                    token="$(secret-tool lookup service gemini account antigravity || true)"
+                    if [ -z "$token" ]; then
+                      echo "Error: No active Antigravity token found in keyring (service=gemini account=antigravity)." >&2
+                      exit 1
+                    fi
+                    printf '%s' "$token" | secret-tool store --label="Antigravity Slot ($slot)" service gemini-slot account "$slot"
+                    printf '%s' "$slot" | secret-tool store --label="Antigravity Active Slot" service gemini-slot account __active__
+                    echo "Saved current Google AI Pro token to keyring slot '$slot'."
+                    ;;
+                  use)
+                    [ -z "$slot" ] && usage
+                    if pgrep -x agy >/dev/null 2>&1; then
+                      echo "Error: Close all running 'agy' instances before switching accounts." >&2
+                      exit 1
+                    fi
+                    token="$(secret-tool lookup service gemini-slot account "$slot" || true)"
+                    if [ -z "$token" ]; then
+                      echo "Error: Keyring slot '$slot' not found. Run 'agy-acct save $slot' first." >&2
+                      exit 1
+                    fi
+                    printf '%s' "$token" | secret-tool store --label="gemini (antigravity)" service gemini account antigravity
+                    printf '%s' "$slot" | secret-tool store --label="Antigravity Active Slot" service gemini-slot account __active__
+                    echo "Switched active Antigravity account to keyring slot '$slot'."
+                    ;;
+                  current)
+                    active="$(secret-tool lookup service gemini-slot account __active__ || true)"
+                    echo "Active slot: ''${active:-unknown}"
+                    ;;
+                  list)
+                    secret-tool search --all service gemini-slot 2>&1 | grep -E '^attribute\.account = ' | sed 's/attribute\.account = //' | grep -v '^__active__$' || true
+                    ;;
+                  *)
+                    usage
+                    ;;
+                esac
+              '';
+            }
+          );
       };
     };
 }

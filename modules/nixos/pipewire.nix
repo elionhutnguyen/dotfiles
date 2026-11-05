@@ -1,7 +1,6 @@
 # modules/nixos/pipewire.nix
 # Vertical Module: PipeWire low-latency audio/video routing & RTKit
-{ ... }:
-{
+_: {
   den.default.nixos =
     { config, lib, ... }:
     let

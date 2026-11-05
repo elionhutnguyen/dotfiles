@@ -1,7 +1,6 @@
 # modules/hm/firefox.nix
 # Vertical Module: Hardened Firefox browser with enterprise policies
-{ ... }:
-{
+_: {
   den.default.homeManager =
     { config, lib, ... }:
     let

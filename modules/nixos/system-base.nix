@@ -1,7 +1,6 @@
 # modules/nixos/system-base.nix
 # Vertical Module: Core kernel, bootloader, zram, VM sysctl, oomd & journald caps
-{ ... }:
-{
+_: {
   den.default.nixos =
     {
       config,
@@ -49,20 +48,33 @@
       };
 
       config = lib.mkIf cfg.enable {
-        boot.kernelPackages = cfg.kernelPackages;
-        boot.loader.systemd-boot = {
-          enable = true;
-          configurationLimit = cfg.configurationLimit;
+        boot = {
+          inherit (cfg) kernelPackages;
+          loader = {
+            systemd-boot = {
+              enable = true;
+              inherit (cfg) configurationLimit;
+            };
+            efi.canTouchEfiVariables = true;
+          };
+          tmp = {
+            useTmpfs = true;
+            tmpfsSize = "50%";
+            cleanOnBoot = false;
+          };
+          kernel.sysctl = {
+            "vm.swappiness" = cfg.swappiness;
+            "vm.page-cluster" = 0;
+          };
         };
-        boot.loader.efi.canTouchEfiVariables = true;
 
-        boot.tmp = {
-          useTmpfs = true;
-          tmpfsSize = "50%";
-          cleanOnBoot = false;
+        systemd = {
+          coredump.enable = false;
+          oomd = {
+            enable = true;
+            enableUserSlices = false;
+          };
         };
-
-        systemd.coredump.enable = false;
 
         zramSwap = {
           enable = true;
@@ -71,22 +83,13 @@
           priority = 100;
         };
 
-        boot.kernel.sysctl = {
-          "vm.swappiness" = cfg.swappiness;
-          "vm.page-cluster" = 0;
-        };
-
-        systemd.oomd = {
-          enable = true;
-          enableUserSlices = false;
-        };
-
-        services.fstrim.enable = true;
-        services.fwupd.enable = true;
-
-        services.journald.settings.Journal = {
-          SystemMaxUse = cfg.journalMaxUse;
-          SystemMaxFiles = 5;
+        services = {
+          fstrim.enable = true;
+          fwupd.enable = true;
+          journald.settings.Journal = {
+            SystemMaxUse = cfg.journalMaxUse;
+            SystemMaxFiles = 5;
+          };
         };
       };
     };

@@ -1,7 +1,6 @@
 # modules/hm/niri.nix
 # Vertical Module: User-level Niri configuration (build-validated KDL & Noctalia IPC)
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,
@@ -80,6 +79,11 @@
         window-rule {
             match app-id="dev.noctalia.Noctalia"
             open-floating true
+        }
+
+        window-rule {
+            match app-id=r#"^(?i).*faugus.*"#
+            open-floating false
         }
 
         // Dialogs and Authentication Prompts

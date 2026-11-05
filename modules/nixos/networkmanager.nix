@@ -1,7 +1,6 @@
 # modules/nixos/networkmanager.nix
 # Vertical Module: NetworkManager system daemon
-{ ... }:
-{
+_: {
   den.default.nixos =
     { config, lib, ... }:
     let

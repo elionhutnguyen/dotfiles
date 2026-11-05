@@ -1,7 +1,6 @@
 # modules/hm/python.nix
 # Vertical Module: Python 3 runtime and uv package/project manager
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,

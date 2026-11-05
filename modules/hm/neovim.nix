@@ -1,7 +1,6 @@
 # modules/hm/neovim.nix
 # Vertical Module: Neovim & Neovide editor (100% self-contained local options)
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,

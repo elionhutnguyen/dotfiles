@@ -1,7 +1,6 @@
 # modules/hm/hw-diag.nix
 # Vertical Module: GPU, VAAPI/VDPAU, PCI, and USB hardware inspection tools
-{ ... }:
-{
+_: {
   den.default.homeManager =
     {
       config,

@@ -1,7 +1,6 @@
 # modules/nixos/power-management.nix
 # Vertical Module: Power profiles daemon & laptop battery charge threshold udev control
-{ ... }:
-{
+_: {
   den.default.nixos =
     { config, lib, ... }:
     let
@@ -25,14 +24,15 @@
       };
 
       config = lib.mkIf cfg.enable {
-        services.power-profiles-daemon.enable = true;
-        services.upower.enable = true;
-
         boot.kernelModules = cfg.extraKernelModules;
 
-        services.udev.extraRules = ''
-          ACTION=="add|change", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}!="", ATTR{charge_control_end_threshold}="${toString cfg.maxChargePercent}"
-        '';
+        services = {
+          power-profiles-daemon.enable = true;
+          upower.enable = true;
+          udev.extraRules = ''
+            ACTION=="add|change", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}!="", ATTR{charge_control_end_threshold}="${toString cfg.maxChargePercent}"
+          '';
+        };
       };
     };
 }
