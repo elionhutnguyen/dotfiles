@@ -1,5 +1,5 @@
 # modules/nixos/niri-system.nix
-# Vertical Module: System-level Niri compositor, Greetd display manager, Noctalia & PAM
+# Vertical Module: System-level Niri compositor, Greetd display manager & portal override
 { ... }:
 {
   den.default.nixos =
@@ -14,7 +14,7 @@
     in
     {
       options.my.niri-system = {
-        enable = lib.mkEnableOption "system-level Niri session, Greetd tuigreet, Noctalia, and portal routing";
+        enable = lib.mkEnableOption "system-level Niri session, Greetd tuigreet, and portal routing";
       };
 
       config = lib.mkIf cfg.enable {
@@ -23,20 +23,13 @@
           useNautilus = false;
         };
 
-        programs.xwayland.enable = true;
-        environment.systemPackages = with pkgs; [
-          xwayland-satellite
-          brightnessctl
-          swaylock
-        ];
-
-        security.pam.services.swaylock = { };
+        environment.systemPackages = [ pkgs.xwayland-satellite ];
 
         services.greetd = {
           enable = true;
           settings = {
             default_session = {
-              command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${pkgs.niri}/bin/niri-session";
+              command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${lib.getExe' config.programs.niri.package "niri-session"}";
               user = "greeter";
             };
           };
@@ -52,27 +45,7 @@
           TTYVTDisallocate = true;
         };
 
-        programs.noctalia = {
-          enable = true;
-          systemd.enable = true;
-          recommendedServices.enable = true;
-        };
-
-        xdg.portal = {
-          enable = true;
-          extraPortals = [
-            pkgs.xdg-desktop-portal-gnome
-          ];
-          config.niri = {
-            default = [
-              "gnome"
-              "gtk"
-            ];
-            "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
-            "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
-            "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
-          };
-        };
+        xdg.portal.config.niri."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
       };
     };
 }

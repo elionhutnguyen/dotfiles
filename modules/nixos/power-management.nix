@@ -26,6 +26,7 @@
 
       config = lib.mkIf cfg.enable {
         services.power-profiles-daemon.enable = true;
+        services.upower.enable = true;
 
         boot.kernelModules = cfg.extraKernelModules;
 

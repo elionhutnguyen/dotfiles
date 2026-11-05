@@ -17,7 +17,10 @@
     imports = [ ./_hardware-configuration.nix ];
 
     # Core System Vertical Modules
-    my.nix-daemon.enable = true;
+    my.nix-daemon = {
+      enable = true;
+      flakePath = "/home/elio/dotfiles";
+    };
     my.system-base.enable = true;
     my.networkmanager.enable = true;
     my.ananicy.enable = true;
@@ -35,15 +38,9 @@
       maxChargePercent = 80;
       extraKernelModules = [ "asus_nb_wmi" ];
     };
-
-    # Host-specific data partition permissions
-    systemd.tmpfiles.rules = [
-      "d /home/data 0775 elio users -"
-      "z /home/data 0775 elio users -"
-    ];
   };
 
-  # 3. Include Genuine Horizontal Aspects + Primary User Aspect
+  # 3. Include Genuine Horizontal Aspects
   den.aspects.elio-laptop.includes = with den.aspects; [
     locale
     storage
@@ -51,6 +48,5 @@
     xdg
     theming
     desktop
-    elio
   ];
 }

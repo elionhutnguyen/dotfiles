@@ -39,7 +39,7 @@
 
         deltaTheme = lib.mkOption {
           type = lib.types.str;
-          default = "tokyonight_night";
+          default = "ansi";
           description = "Syntax-highlighting theme for Delta pager.";
         };
       };
@@ -215,13 +215,14 @@
               };
               git = {
                 overrideGpg = true;
-                pagers = [
+                diffRenderers = [
                   {
                     colorArg = "always";
-                    pager = "${deltaExe} --dark --paging=never";
+                    command = "${deltaExe} --dark --paging=never";
                   }
                   {
-                    externalDiffCommand = "${difftExe} --color=always";
+                    type = "extDiff";
+                    command = "${difftExe} --color=always";
                   }
                 ];
               };

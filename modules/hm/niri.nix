@@ -1,5 +1,5 @@
 # modules/hm/niri.nix
-# Vertical Module: User-level Niri configuration (build-validated KDL, Vicinae & Swayidle)
+# Vertical Module: User-level Niri configuration (build-validated KDL & Noctalia IPC)
 { ... }:
 {
   den.default.homeManager =
@@ -12,7 +12,17 @@
     let
       cfg = config.my.niri;
 
+      startupCommands = lib.concatMapStringsSep "\n" (
+        argv: "spawn-at-startup ${lib.concatMapStringsSep " " (arg: ''"${arg}"'') argv}"
+      ) cfg.spawnAtStartup;
+
       niriKdl = pkgs.writeText "niri-raw.kdl" ''
+        ${startupCommands}
+
+        debug {
+            honor-xdg-activation-with-invalid-serial
+        }
+
         input {
             keyboard {
                 xkb {
@@ -67,6 +77,11 @@
             clip-to-geometry true
         }
 
+        window-rule {
+            match app-id="dev.noctalia.Noctalia"
+            open-floating true
+        }
+
         // Dialogs and Authentication Prompts
         window-rule {
             match app-id=r#"^org\.gnome\.Polkit.*"#
@@ -99,14 +114,15 @@
             Mod+Shift+Slash { show-hotkey-overlay; }
 
             Mod+T hotkey-overlay-title="Open a Terminal" { spawn "${cfg.terminal}"; }
-            Mod+D hotkey-overlay-title="Run an Application" { spawn "${cfg.launcher}" "toggle"; }
+            Mod+D hotkey-overlay-title="Application Launcher" { spawn "${cfg.shell}" "msg" "panel-toggle" "launcher"; }
+            Mod+S hotkey-overlay-title="Control Center" { spawn "${cfg.shell}" "msg" "panel-toggle" "control-center"; }
             Mod+E hotkey-overlay-title="File Manager" { spawn "${cfg.terminal}" "-e" "${cfg.fileManager}"; }
-            Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "${cfg.screenLocker}"; }
+            Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "${cfg.shell}" "msg" "session" "lock"; }
 
-            XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }
-            XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
-            XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-            XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+            XF86AudioRaiseVolume allow-when-locked=true { spawn "${cfg.shell}" "msg" "volume-up"; }
+            XF86AudioLowerVolume allow-when-locked=true { spawn "${cfg.shell}" "msg" "volume-down"; }
+            XF86AudioMute        allow-when-locked=true { spawn "${cfg.shell}" "msg" "volume-mute"; }
+            XF86AudioMicMute     allow-when-locked=true { spawn "${cfg.shell}" "msg" "mic-mute"; }
 
             XF86AudioPlay        allow-when-locked=true { spawn "playerctl" "play-pause"; }
             XF86AudioPause       allow-when-locked=true { spawn "playerctl" "play-pause"; }
@@ -114,8 +130,8 @@
             XF86AudioPrev        allow-when-locked=true { spawn "playerctl" "previous"; }
             XF86AudioNext        allow-when-locked=true { spawn "playerctl" "next"; }
 
-            XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-            XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+            XF86MonBrightnessUp   allow-when-locked=true { spawn "${cfg.shell}" "msg" "brightness-up"; }
+            XF86MonBrightnessDown allow-when-locked=true { spawn "${cfg.shell}" "msg" "brightness-down"; }
 
             // Dynamic Cast Controls
             Mod+Shift+C { set-dynamic-cast-window; }
@@ -228,7 +244,7 @@
     in
     {
       options.my.niri = {
-        enable = lib.mkEnableOption "user-level Niri compositor configuration, Vicinae, and Swayidle";
+        enable = lib.mkEnableOption "user-level Niri compositor configuration";
 
         activeBorderColor = lib.mkOption {
           type = lib.types.str;
@@ -242,16 +258,16 @@
           description = "Hex color for inactive window focus ring.";
         };
 
+        shell = lib.mkOption {
+          type = lib.types.str;
+          default = "noctalia";
+          description = "Desktop shell IPC binary used for launcher, session lock, and OSD controls.";
+        };
+
         terminal = lib.mkOption {
           type = lib.types.str;
           default = "ghostty";
           description = "Terminal emulator binary spawned by Mod+T and Mod+E.";
-        };
-
-        launcher = lib.mkOption {
-          type = lib.types.str;
-          default = "vicinae";
-          description = "Application launcher binary spawned by Mod+D.";
         };
 
         fileManager = lib.mkOption {
@@ -260,49 +276,14 @@
           description = "TUI file manager binary spawned inside the terminal by Mod+E.";
         };
 
-        screenLocker = lib.mkOption {
-          type = lib.types.str;
-          default = "swaylock";
-          description = "Screen locker binary spawned by Mod+Alt+L.";
-        };
-
-        lockTimeout = lib.mkOption {
-          type = lib.types.int;
-          default = 300;
-          description = "Idle timeout in seconds before locking the session.";
-        };
-
-        dpmsTimeout = lib.mkOption {
-          type = lib.types.int;
-          default = 600;
-          description = "Idle timeout in seconds before powering off monitors.";
+        spawnAtStartup = lib.mkOption {
+          type = lib.types.listOf (lib.types.listOf lib.types.str);
+          default = [ ];
+          description = "Commands spawned at Niri startup (each entry is an argv list).";
         };
       };
 
       config = lib.mkIf cfg.enable {
-        programs.vicinae = {
-          enable = true;
-          systemd.enable = true;
-        };
-
-        services.swayidle = {
-          enable = true;
-          timeouts = [
-            {
-              timeout = cfg.lockTimeout;
-              command = "${pkgs.swaylock}/bin/swaylock -f";
-            }
-            {
-              timeout = cfg.dpmsTimeout;
-              command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
-            }
-          ];
-          events = {
-            before-sleep = "${pkgs.swaylock}/bin/swaylock -f";
-            lock = "${pkgs.swaylock}/bin/swaylock -f";
-          };
-        };
-
         xdg.configFile."niri/config.kdl".source = validatedNiriConfig;
       };
     };

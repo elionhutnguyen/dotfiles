@@ -6,11 +6,6 @@
     nixos = {
       programs.zsh.enable = true;
       environment.pathsToLink = [ "/share/zsh" ];
-      programs.git.enable = true;
-      environment.variables = {
-        EDITOR = "nvim";
-        VISUAL = "nvim";
-      };
     };
 
     user =
@@ -28,6 +23,7 @@
       };
       my.yazi.enable = true;
       my.cli-tools.enable = true;
+      my.python.enable = true;
     };
   };
 }

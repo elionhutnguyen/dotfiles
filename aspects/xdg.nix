@@ -58,9 +58,6 @@
           "d %h/.config/npm 0755 - - - -"
           "d %h/.local/share/gnupg 0700 - - - -"
           "d %h/.cache/nv 0755 - - - -"
-
-          # Safe 30-day age pruning on regenerable ~/.cache only
-          "e %h/.cache - - - 30d"
         ];
       };
   };

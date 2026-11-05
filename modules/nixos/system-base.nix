@@ -35,6 +35,12 @@
           description = "Percentage of RAM allocated to zstd zram swap.";
         };
 
+        swappiness = lib.mkOption {
+          type = lib.types.ints.between 0 200;
+          default = 100;
+          description = "Kernel vm.swappiness value (100 balances zram with physical NVMe swap).";
+        };
+
         journalMaxUse = lib.mkOption {
           type = lib.types.str;
           default = "500M";
@@ -66,7 +72,7 @@
         };
 
         boot.kernel.sysctl = {
-          "vm.swappiness" = 180;
+          "vm.swappiness" = cfg.swappiness;
           "vm.page-cluster" = 0;
         };
 

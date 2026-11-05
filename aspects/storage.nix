@@ -3,10 +3,16 @@
 { ... }:
 {
   den.aspects.storage = {
-    nixos = {
-      services.udisks2.enable = true;
-      services.gvfs.enable = true;
-    };
+    nixos =
+      { config, lib, ... }:
+      {
+        services.udisks2.enable = true;
+        services.gvfs.enable = true;
+
+        systemd.tmpfiles.rules = lib.mkIf (config.fileSystems ? "/home/data") [
+          "d /home/data 0775 root users -"
+        ];
+      };
 
     homeManager = {
       services.udiskie = {

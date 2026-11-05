@@ -4,8 +4,6 @@
 {
   den.aspects.gaming = {
     nixos = {
-      hardware.graphics.enable32Bit = true;
-
       nixpkgs.config.problems.handlers = {
         "gtk+".broken = "warn";
       };

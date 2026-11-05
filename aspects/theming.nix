@@ -37,35 +37,51 @@ in
       };
 
     # Outward Push: Configure local options of oblivious vertical HM modules
-    homeManager = {
-      my.niri = {
-        activeBorderColor = "#7aa2f7";
-        inactiveBorderColor = "#24283b";
-      };
+    homeManager =
+      { pkgs, ... }:
+      {
+        my.noctalia = {
+          fontFamily = "Noto Sans";
+          theme = "Tokyo-Night";
+        };
 
-      my.ghostty = {
-        fontFamily = monoFont;
-        fontSize = fontSize;
-        theme = "TokyoNight Night";
-      };
+        my.cli-tools.btopTheme = "tokyo-night";
 
-      my.neovim = {
-        fontFamily = monoFont;
-        fontSize = fontSize;
-        colorscheme = "tokyonight-night";
-      };
+        my.niri = {
+          activeBorderColor = "#7aa2f7";
+          inactiveBorderColor = "#24283b";
+        };
 
-      my.vcs = {
-        deltaTheme = "tokyonight_night";
-      };
+        my.ghostty = {
+          fontFamily = monoFont;
+          fontSize = fontSize;
+          theme = "TokyoNight Night";
+        };
 
-      my.opencode = {
-        theme = "tokyonight";
-      };
+        my.neovim = {
+          fontFamily = monoFont;
+          fontSize = fontSize;
+          colorscheme = "tokyonight-night";
+        };
 
-      my.antigravity = {
-        colorScheme = "tokyo night";
+        my.vcs = {
+          deltaTheme = "ansi";
+        };
+
+        my.antigravity = {
+          colorScheme = "tokyo night";
+        };
+
+        dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+
+        home.pointerCursor = {
+          enable = true;
+          package = pkgs.adwaita-icon-theme;
+          name = "Adwaita";
+          size = 24;
+          gtk.enable = true;
+          x11.enable = true;
+        };
       };
-    };
   };
 }

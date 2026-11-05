@@ -1,5 +1,5 @@
 # modules/hm/antigravity.nix
-# Vertical Module: Google Antigravity CLI (`agy`) via native HM module & optional GUI
+# Vertical Module: Google Antigravity CLI (`agy`) tuned for Google AI Pro efficiency
 { ... }:
 {
   den.default.homeManager =
@@ -18,13 +18,26 @@
 
         defaultModel = lib.mkOption {
           type = lib.types.str;
-          default = "gemini-3.8-flash";
-          description = ''
-            Default model for Antigravity CLI sessions.
-            Use "gemini-3.8-flash" as the daily baseline to conserve Google AI Pro
-            rolling/weekly quota, and escalate in-session to "gemini-3.1-pro" or
-            "gemini-4-argon" when needed.
-          '';
+          default = "gemini-4-argon-medium";
+          description = "Balanced default model ID for daily coding and interactive sessions.";
+        };
+
+        highEffortModel = lib.mkOption {
+          type = lib.types.str;
+          default = "gemini-4-argon-high";
+          description = "High-reasoning model ID reserved for complex multi-file architecture (`agy-high`).";
+        };
+
+        fastModel = lib.mkOption {
+          type = lib.types.str;
+          default = "gemini-4-argon-low";
+          description = "Low-latency, low-token model ID for quick general Q&A and one-liners (`agy-fast`).";
+        };
+
+        enableShellAliases = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Install tiered shell aliases (`agy-high`, `agy-fast`) for quota-aware model switching.";
         };
 
         colorScheme = lib.mkOption {
@@ -84,6 +97,11 @@
             showTips = false;
             showFeedbackSurvey = false;
           };
+        };
+
+        home.shellAliases = lib.mkIf cfg.enableShellAliases {
+          agy-high = "agy --model ${cfg.highEffortModel}";
+          agy-fast = "agy --model ${cfg.fastModel}";
         };
 
         home.packages = lib.optional cfg.enableGui pkgs.antigravity;

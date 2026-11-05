@@ -33,6 +33,12 @@
           default = "tokyonight-night";
           description = "Neovim colorscheme name.";
         };
+
+        extraPlugins = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
+          default = [ ];
+          description = "Additional Neovim plugins to install alongside the core suite.";
+        };
       };
 
       config = lib.mkIf cfg.enable {
@@ -69,14 +75,7 @@
             withRuby = false;
 
             extraPackages = with pkgs; [
-              ripgrep
-              fd
-              trash-cli
-
               nixd
-              nixfmt
-              statix
-              deadnix
 
               lua-language-server
               stylua
@@ -91,23 +90,25 @@
               vscode-langservers-extracted
             ];
 
-            plugins = with pkgs.vimPlugins; [
-              tokyonight-nvim
-              nvim-web-devicons
-              nvim-treesitter.withAllGrammars
-              oil-nvim
-              plenary-nvim
-              telescope-nvim
-              telescope-fzf-native-nvim
-              telescope-ui-select-nvim
-              nvim-lspconfig
-              blink-cmp
-              conform-nvim
-              gitsigns-nvim
-              which-key-nvim
-              mini-nvim
-              markdown-preview-nvim
-            ];
+            plugins =
+              (with pkgs.vimPlugins; [
+                tokyonight-nvim
+                nvim-web-devicons
+                nvim-treesitter.withAllGrammars
+                oil-nvim
+                plenary-nvim
+                telescope-nvim
+                telescope-fzf-native-nvim
+                telescope-ui-select-nvim
+                nvim-lspconfig
+                blink-cmp
+                conform-nvim
+                gitsigns-nvim
+                which-key-nvim
+                mini-nvim
+                markdown-preview-nvim
+              ])
+              ++ cfg.extraPlugins;
 
             initLua = ''
               -- =============================================================
@@ -185,7 +186,10 @@
               -- =============================================================
               -- 3. Colorscheme
               -- =============================================================
-              require("tokyonight").setup({ style = "night" })
+              local ok_tn, tokyonight = pcall(require, "tokyonight")
+              if ok_tn then
+                tokyonight.setup({ style = "night" })
+              end
               vim.cmd.colorscheme("${cfg.colorscheme}")
 
               -- =============================================================
