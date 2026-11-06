@@ -67,14 +67,18 @@ _: {
 
           nvidia = {
             modesetting.enable = true;
-            powerManagement.enable = true;
-            powerManagement.finegrained = true;
+            powerManagement = {
+              enable = true;
+              finegrained = true;
+            };
             inherit (cfg) open;
             nvidiaSettings = true;
 
             prime = {
-              offload.enable = true;
-              offload.enableOffloadCmd = true;
+              offload = {
+                enable = true;
+                enableOffloadCmd = true;
+              };
               inherit (cfg) nvidiaBusId;
               amdgpuBusId = lib.mkIf (cfg.amdgpuBusId != "") cfg.amdgpuBusId;
               intelBusId = lib.mkIf (cfg.intelBusId != "") cfg.intelBusId;
@@ -82,16 +86,18 @@ _: {
           };
         };
 
-        services.xserver.videoDrivers = [ "nvidia" ];
+        services = {
+          xserver.videoDrivers = [ "nvidia" ];
 
-        services.cardwired = lib.mkIf cfg.cardwiredEnable {
-          enable = true;
-          settings = {
-            auto_apply_gpu_state = true;
-            experimental_nvidia_block = true;
-            battery_auto_switch = true;
-            battery_auto_switch_mode = "hybrid";
-            external_display_auto_switch = true;
+          cardwired = lib.mkIf cfg.cardwiredEnable {
+            enable = true;
+            settings = {
+              auto_apply_gpu_state = true;
+              experimental_nvidia_block = true;
+              battery_auto_switch = true;
+              battery_auto_switch_mode = "hybrid";
+              external_display_auto_switch = true;
+            };
           };
         };
 

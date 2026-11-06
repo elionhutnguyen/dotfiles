@@ -15,6 +15,8 @@ _: {
       options.my.cli-tools = {
         enable = lib.mkEnableOption "core CLI search utilities (ripgrep, fd), Nix linters, btop, and trash-cli";
 
+        enableHwDiag = lib.mkEnableOption "hardware and GPU diagnostic tools (nvtop, vainfo, vdpauinfo, lspci, lsusb)";
+
         btopTheme = lib.mkOption {
           type = lib.types.str;
           default = "tokyo-night";
@@ -33,18 +35,28 @@ _: {
           direnv = {
             enable = true;
             nix-direnv.enable = true;
-            enableZshIntegration = true;
           };
         };
 
-        home.packages = with pkgs; [
-          trash-cli
+        home.packages =
+          (with pkgs; [
+            trash-cli
 
-          # Deterministic Nix formatters & linters for zero-token agent verification
-          nixfmt
-          statix
-          deadnix
-        ];
+            # Deterministic Nix formatters & linters for zero-token agent verification
+            nixfmt
+            statix
+            deadnix
+          ])
+          ++ lib.optionals cfg.enableHwDiag (
+            with pkgs;
+            [
+              libva-utils
+              vdpauinfo
+              pciutils
+              usbutils
+              nvtopPackages.full
+            ]
+          );
       };
     };
 }

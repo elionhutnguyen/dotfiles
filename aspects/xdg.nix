@@ -13,8 +13,6 @@ _: {
         unusedXdgDir = "${config.xdg.dataHome}/xdg-unused";
       in
       {
-        home.preferXdgDirectories = true;
-
         xdg = {
           enable = true;
           userDirs = {
@@ -38,24 +36,26 @@ _: {
           };
         };
 
-        home.sessionVariables = {
-          NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
-          NODE_REPL_HISTORY = "${config.xdg.stateHome}/node_repl_history";
-          CARGO_HOME = "${config.xdg.dataHome}/cargo";
-          RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
-          GOPATH = "${config.xdg.dataHome}/go";
-          GNUPGHOME = "${config.xdg.dataHome}/gnupg";
-          CUDA_CACHE_PATH = "${config.xdg.cacheHome}/nv";
-          __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
-          DOTNET_CLI_HOME = "${config.xdg.dataHome}/dotnet";
-          DOCKER_CONFIG = "${config.xdg.configHome}/docker";
+        home = {
+          preferXdgDirectories = true;
+
+          sessionVariables = {
+            NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
+            NODE_REPL_HISTORY = "${config.xdg.stateHome}/node_repl_history";
+            CARGO_HOME = "${config.xdg.dataHome}/cargo";
+            RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
+            GOPATH = "${config.xdg.dataHome}/go";
+            GNUPGHOME = "${config.xdg.dataHome}/gnupg";
+            CUDA_CACHE_PATH = "${config.xdg.cacheHome}/nv";
+            __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
+            DOTNET_CLI_HOME = "${config.xdg.dataHome}/dotnet";
+            DOCKER_CONFIG = "${config.xdg.configHome}/docker";
+          };
         };
 
         systemd.user.tmpfiles.rules = [
           # Ensure required XDG subdirectories exist
           "d %h/.local/share/xdg-unused 0700 - - - -"
-          "d %h/.config/npm 0755 - - - -"
-          "d %h/.local/share/gnupg 0700 - - - -"
           "d %h/.cache/nv 0755 - - - -"
         ];
       };

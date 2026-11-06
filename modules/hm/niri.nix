@@ -237,7 +237,7 @@ _: {
       '';
 
       validatedNiriConfig =
-        pkgs.runCommand "niri-config.kdl"
+        pkgs.runCommandLocal "niri-config.kdl"
           {
             nativeBuildInputs = [ pkgs.niri ];
           }

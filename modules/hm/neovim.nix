@@ -93,7 +93,38 @@ _: {
               (with pkgs.vimPlugins; [
                 tokyonight-nvim
                 nvim-web-devicons
-                nvim-treesitter.withAllGrammars
+                (nvim-treesitter.withPlugins (
+                  p: with p; [
+                    bash
+                    c
+                    cpp
+                    diff
+                    git_config
+                    git_rebase
+                    gitcommit
+                    gitignore
+                    go
+                    html
+                    javascript
+                    json
+                    lua
+                    luadoc
+                    markdown
+                    markdown_inline
+                    nix
+                    python
+                    query
+                    regex
+                    rust
+                    toml
+                    tsx
+                    typescript
+                    vim
+                    vimdoc
+                    xml
+                    yaml
+                  ]
+                ))
                 oil-nvim
                 plenary-nvim
                 telescope-nvim

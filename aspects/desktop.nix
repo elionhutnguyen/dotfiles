@@ -1,24 +1,26 @@
 # aspects/desktop.nix
-# Horizontal Aspect: Multi-class Wayland desktop glue (Niri, Noctalia, PAM Keyring)
+# Horizontal Aspect: Multi-class Wayland desktop glue (Niri, Noctalia, Ghostty)
 _: {
   den.aspects.desktop = {
     nixos =
       { pkgs, ... }:
       {
-        # Enable system-level Niri vertical module (includes self-contained portals & Greetd)
+        # Enable system-level Niri vertical module (includes self-contained portals, keyring & Greetd)
         my.niri-system.enable = true;
 
-        # PAM Auto-Unlock & Wayland Ozone Environment
-        security.pam.services.greetd.enableGnomeKeyring = true;
-        environment.systemPackages = [ pkgs.wl-clipboard ];
-        environment.sessionVariables = {
-          NIXOS_OZONE_WL = "1";
+        # Wayland Clipboard & Ozone Environment
+        environment = {
+          systemPackages = [ pkgs.wl-clipboard ];
+          sessionVariables = {
+            NIXOS_OZONE_WL = "1";
+          };
         };
       };
 
-    homeManager = {
-      my.noctalia.enable = true;
-      my.niri = {
+    homeManager.my = {
+      noctalia.enable = true;
+      ghostty.enable = true;
+      niri = {
         enable = true;
         shell = "noctalia";
         terminal = "ghostty";

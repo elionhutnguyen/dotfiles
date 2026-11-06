@@ -25,7 +25,6 @@ _: {
       config = lib.mkIf cfg.enable {
         programs.yazi = {
           enable = true;
-          enableZshIntegration = true;
           inherit (cfg) shellWrapperName;
           package = pkgs.yazi.override {
             _7zz = pkgs._7zz-rar;

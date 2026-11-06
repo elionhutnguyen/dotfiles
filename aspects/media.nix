@@ -9,6 +9,7 @@ _: {
     homeManager =
       { pkgs, ... }:
       {
+        my.mpv.enable = true;
         programs.wiremix.enable = true;
         services.playerctld.enable = true;
         home.packages = [ pkgs.playerctl ];

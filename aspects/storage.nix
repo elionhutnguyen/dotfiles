@@ -5,11 +5,13 @@ _: {
     nixos =
       { config, lib, ... }:
       {
-        services.udisks2.enable = true;
-        services.gvfs.enable = true;
+        services = {
+          udisks2.enable = true;
+          gvfs.enable = true;
+        };
 
         systemd.tmpfiles.rules = lib.mkIf (config.fileSystems ? "/home/data") [
-          "d /home/data 0775 elio users -"
+          "d /home/data 0775 root users -"
         ];
       };
 

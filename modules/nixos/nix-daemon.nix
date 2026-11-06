@@ -55,16 +55,18 @@ _: {
       config = lib.mkIf cfg.enable {
         nixpkgs.config.allowUnfree = cfg.allowUnfree;
 
-        programs.nix-ld.enable = true;
+        programs = {
+          nix-ld.enable = true;
 
-        # NH (Nix Helper): nix-output-monitor tree + nvd package diffs + generation-safe GC
-        programs.nh = {
-          enable = true;
-          flake = cfg.flakePath;
-          clean = {
+          # NH (Nix Helper): nix-output-monitor tree + nvd package diffs + generation-safe GC
+          nh = {
             enable = true;
-            dates = cfg.gcDates;
-            extraArgs = "--keep-since ${cfg.gcKeepSince} --keep ${toString cfg.gcKeepGenerations}";
+            flake = cfg.flakePath;
+            clean = {
+              enable = true;
+              dates = cfg.gcDates;
+              extraArgs = "--keep-since ${cfg.gcKeepSince} --keep ${toString cfg.gcKeepGenerations}";
+            };
           };
         };
 
@@ -79,6 +81,8 @@ _: {
             ];
             use-xdg-base-directories = cfg.useXdgDirectories;
             auto-optimise-store = true;
+            keep-outputs = true;
+            keep-derivations = true;
             trusted-users = [
               "root"
               "@wheel"

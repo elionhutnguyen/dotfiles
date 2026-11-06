@@ -46,13 +46,13 @@ in
       };
 
     # Outward Push: Configure solar coordinates in `noctalia` and IME startup in `niri`
-    homeManager = {
-      my.noctalia = {
+    homeManager.my = {
+      noctalia = {
         nightlightEnable = true;
         latitude = 25.03;
         longitude = 121.56;
       };
-      my.niri.spawnAtStartup = [
+      niri.spawnAtStartup = [
         [
           "fcitx5"
           "-d"

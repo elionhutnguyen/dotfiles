@@ -24,12 +24,21 @@ _: {
 
         environment.systemPackages = [ pkgs.xwayland-satellite ];
 
-        services.greetd = {
-          enable = true;
-          settings = {
-            default_session = {
-              command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${lib.getExe' config.programs.niri.package "niri-session"}";
-              user = "greeter";
+        security.pam.services.greetd.enableGnomeKeyring = true;
+
+        services = {
+          gnome = {
+            gnome-keyring.enable = true;
+            gcr-ssh-agent.enable = false;
+          };
+
+          greetd = {
+            enable = true;
+            settings = {
+              default_session = {
+                command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${lib.getExe' config.programs.niri.package "niri-session"}";
+                user = "greeter";
+              };
             };
           };
         };
@@ -44,7 +53,14 @@ _: {
           TTYVTDisallocate = true;
         };
 
-        xdg.portal.config.niri."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        xdg.portal = {
+          enable = true;
+          extraPortals = [
+            pkgs.xdg-desktop-portal-gtk
+            pkgs.xdg-desktop-portal-gnome
+          ];
+          config.niri."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        };
       };
     };
 }

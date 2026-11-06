@@ -74,8 +74,7 @@ _: {
             };
             location = {
               auto_locate = false;
-              inherit (cfg) latitude;
-              inherit (cfg) longitude;
+              inherit (cfg) latitude longitude;
             };
             nightlight = {
               enabled = cfg.nightlightEnable;

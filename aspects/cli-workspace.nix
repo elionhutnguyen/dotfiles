@@ -13,18 +13,19 @@ _: {
         shell = pkgs.zsh;
       };
 
-    homeManager = {
-      my = {
-        zsh.enable = true;
-        neovim.enable = true;
-        vcs = {
-          enable = true;
-          editor = "nvim";
-        };
-        yazi.enable = true;
-        cli-tools.enable = true;
-        python.enable = true;
+    homeManager.my = {
+      zsh.enable = true;
+      neovim.enable = true;
+      vcs = {
+        enable = true;
+        editor = "nvim";
       };
+      yazi.enable = true;
+      cli-tools = {
+        enable = true;
+        enableHwDiag = true;
+      };
+      python.enable = true;
     };
   };
 }

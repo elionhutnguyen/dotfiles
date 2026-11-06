@@ -23,15 +23,6 @@ _: {
       };
 
       config = lib.mkIf cfg.enable {
-        home.packages = [
-          pkgs.zsh-completions
-        ];
-
-        systemd.user.tmpfiles.rules = [
-          "d %h/.local/state/zsh 0700 - - - -"
-          "d %h/.cache/zsh 0700 - - - -"
-        ];
-
         programs = {
           zsh = {
             enable = true;
@@ -87,16 +78,11 @@ _: {
                 bindkey '^[[H'    beginning-of-line
                 bindkey '^[[F'    end-of-line
               '')
-
-              (lib.mkOrder 2000 ''
-                eval "$(${lib.getExe config.programs.zoxide.package} init zsh)"
-              '')
             ];
           };
 
           fzf = {
             enable = true;
-            enableZshIntegration = true;
             historyWidget.command = "";
             defaultOptions = [
               "--height=40%"
@@ -108,7 +94,6 @@ _: {
 
           atuin = {
             enable = true;
-            enableZshIntegration = true;
             flags = [ "--disable-up-arrow" ];
             settings = {
               auto_sync = false;
@@ -122,14 +107,10 @@ _: {
             };
           };
 
-          zoxide = {
-            enable = true;
-            enableZshIntegration = false;
-          };
+          zoxide.enable = true;
 
           starship = {
             enable = true;
-            enableZshIntegration = true;
             settings = {
               add_newline = false;
               command_timeout = 1000;

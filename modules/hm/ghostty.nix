@@ -32,7 +32,6 @@ _: {
       config = lib.mkIf cfg.enable {
         programs.ghostty = {
           enable = true;
-          enableZshIntegration = true;
           installVimSyntax = true;
           settings = {
             font-family = cfg.fontFamily;

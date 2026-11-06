@@ -13,13 +13,10 @@
       # Primary AI Coding Assistant (Google Antigravity CLI)
       antigravity.enable = true;
 
-      # Personal GUI, Terminal & Diagnostic Vertical Modules
-      ghostty.enable = true;
+      # Personal GUI Vertical Modules
       vscode.enable = true;
       gui-apps.enable = true;
       firefox.enable = true;
-      mpv.enable = true;
-      hw-diag.enable = true;
     };
 
     # Include genuine multi-class user aspects
