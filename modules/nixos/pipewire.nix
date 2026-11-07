@@ -8,7 +8,7 @@ _: {
     in
     {
       options.my.pipewire = {
-        enable = lib.mkEnableOption "PipeWire audio daemon with ALSA, PulseAudio, and WirePlumber";
+        enable = lib.mkEnableOption "PipeWire audio daemon with ALSA and PulseAudio compatibility";
       };
 
       config = lib.mkIf cfg.enable {
@@ -21,7 +21,6 @@ _: {
             support32Bit = true;
           };
           pulse.enable = true;
-          wireplumber.enable = true;
         };
       };
     };

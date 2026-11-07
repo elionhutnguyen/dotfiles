@@ -27,7 +27,6 @@ _: {
           zsh = {
             enable = true;
             dotDir = "${config.xdg.configHome}/zsh";
-            enableCompletion = true;
             defaultKeymap = "emacs";
 
             autosuggestion = {
@@ -39,7 +38,6 @@ _: {
             };
 
             fastSyntaxHighlighting.enable = true;
-            syntaxHighlighting.enable = false;
 
             history = {
               path = "${config.xdg.stateHome}/zsh/history";
@@ -48,8 +46,6 @@ _: {
               extended = true;
               expireDuplicatesFirst = true;
               ignoreAllDups = true;
-              ignoreSpace = true;
-              share = true;
             };
 
             setOptions = [
@@ -68,7 +64,7 @@ _: {
                 zstyle ':completion:*' menu no
                 zstyle ':completion:*:descriptions' format '[%d]'
                 zstyle ':fzf-tab:*' switch-group '<' '>'
-                zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.coreutils}/bin/ls -1 --color=always $realpath'
+                zstyle ':fzf-tab:complete:cd:*' fzf-preview '${lib.getExe' pkgs.coreutils "ls"} -1 --color=always $realpath'
               '')
 
               (lib.mkOrder 1000 ''

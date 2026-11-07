@@ -69,12 +69,15 @@ _: {
             vimAlias = true;
             vimdiffAlias = true;
 
-            withNodeJs = false;
             withPython3 = false;
-            withRuby = false;
 
             extraPackages = with pkgs; [
+              fd
+              ripgrep
+              trash-cli
+
               nixd
+              nixfmt
 
               lua-language-server
               stylua

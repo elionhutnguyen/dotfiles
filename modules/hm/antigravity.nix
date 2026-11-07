@@ -16,9 +16,9 @@ _: {
         enable = lib.mkEnableOption "Google Antigravity CLI (agy) tuned for Google AI Pro";
 
         defaultModel = lib.mkOption {
-          type = lib.types.str;
-          default = "Auto";
-          description = "Balanced default model ID for daily coding and interactive sessions.";
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Balanced default model ID for daily coding and interactive sessions (`null` uses upstream default without exporting GEMINI_MODEL).";
         };
 
         highEffortModel = lib.mkOption {
@@ -51,9 +51,20 @@ _: {
           description = "TUI color scheme written to Antigravity CLI settings.json.";
         };
 
+        agentMode = lib.mkOption {
+          type = lib.types.enum [
+            "default"
+            "accept-edits"
+            "auto"
+            "plan"
+          ];
+          default = "auto";
+          description = "Default execution mode for Antigravity CLI (`auto` enables Auto mode: edits & safe commands auto-approved).";
+        };
+
         enableTerminalSandbox = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = true;
           description = "Run terminal commands inside Antigravity's OS containment sandbox.";
         };
 
@@ -64,7 +75,7 @@ _: {
             "strict"
             "always-proceed"
           ];
-          default = "always-proceed";
+          default = "proceed-in-sandbox";
           description = "Global tool-approval preset for local commands and edits.";
         };
 
@@ -84,28 +95,45 @@ _: {
       config = lib.mkIf cfg.enable {
         programs.antigravity-cli = {
           enable = true;
-          package = pkgs.antigravity-cli;
           inherit (cfg) defaultModel enableMcpIntegration;
 
           # Merge declarative settings into a writable file on activation so
           # Google AI Pro OAuth sign-in can persist auth state in settings.json.
           mutableSettings = true;
 
+          permissions.allow = [
+            "read_file(/nix)"
+            "read_file(/run)"
+            "read_file(/etc)"
+            "write_file(/tmp)"
+            "command(nix)"
+            "command(nh)"
+            "command(nixos-rebuild)"
+            "command(git)"
+            "command(gh)"
+            "command(fd)"
+            "command(rg)"
+            "command(nixfmt)"
+            "command(statix)"
+            "command(deadnix)"
+          ];
+
           settings = {
-            inherit (cfg) colorScheme enableTerminalSandbox toolPermission;
-            sandbox = cfg.enableTerminalSandbox;
+            inherit (cfg)
+              agentMode
+              colorScheme
+              enableTerminalSandbox
+              toolPermission
+              ;
+            allowNonWorkspaceAccess = true;
             altScreenMode = "always";
-            artifactReviewPolicy = "agent-decides";
+            artifactReviewPolicy = "always-proceed";
             showTips = false;
             showFeedbackSurvey = false;
           };
         };
 
         home = {
-          sessionVariables = lib.mkIf (!cfg.enableTerminalSandbox) {
-            GEMINI_SANDBOX = "false";
-          };
-
           shellAliases = lib.mkIf cfg.enableShellAliases (
             {
               agy-high = "agy --model \"${cfg.highEffortModel}\"";
@@ -129,6 +157,8 @@ _: {
                   pkgs.findutils
                 ];
                 text = ''
+                  umask 077
+
                   usage() {
                     echo "Usage: agy-acct <save|use|list|current> [slot-name]" >&2
                     exit 1
@@ -136,12 +166,11 @@ _: {
 
                   slots_root="''${XDG_DATA_HOME:-$HOME/.local/share}/antigravity-cli/slots"
                   auth_files=(
+                    "antigravity-oauth-token"
                     "oauth_creds.json"
                     "google_accounts.json"
                     "mcp-oauth-tokens.json"
                     "credentials.json"
-                    "settings.json"
-                    ".env"
                   )
 
                   cmd="''${1:-}"
@@ -151,18 +180,19 @@ _: {
                     save)
                       [ -z "$slot" ] && usage
                       slot_dir="$slots_root/$slot"
-                      mkdir -p -m 700 "$slots_root" "$slot_dir" "$slot_dir/files/gemini" "$slot_dir/files/antigravity-cli"
+                      rm -rf "$slot_dir/files"
+                      mkdir -p "$slots_root" "$slot_dir/files/gemini" "$slot_dir/files/antigravity-cli"
 
                       token="$(
-                        secret-tool lookup service gemini account antigravity 2>/dev/null \
+                        secret-tool lookup service gemini username antigravity 2>/dev/null \
+                          || secret-tool lookup service gemini account antigravity 2>/dev/null \
+                          || secret-tool lookup service antigravity-cli username default 2>/dev/null \
                           || secret-tool lookup service antigravity-cli account default 2>/dev/null \
-                          || secret-tool lookup service gemini-cli account default 2>/dev/null \
                           || true
                       )"
 
                       found_any=0
                       if [ -n "$token" ]; then
-                        umask 077
                         printf '%s' "$token" > "$slot_dir/keyring.token"
                         found_any=1
                       else
@@ -174,20 +204,19 @@ _: {
                           install -m 600 "$HOME/.gemini/$f" "$slot_dir/files/gemini/$f"
                           found_any=1
                         fi
-                        if [ -f "$HOME/.config/antigravity-cli/$f" ]; then
-                          install -m 600 "$HOME/.config/antigravity-cli/$f" "$slot_dir/files/antigravity-cli/$f"
+                        if [ -f "$HOME/.gemini/antigravity-cli/$f" ]; then
+                          install -m 600 "$HOME/.gemini/antigravity-cli/$f" "$slot_dir/files/antigravity-cli/$f"
                           found_any=1
                         fi
                       done
 
                       if [ "$found_any" -eq 0 ]; then
                         rm -rf "$slot_dir"
-                        echo "Error: No Antigravity keyring token or credential files found (~/.gemini or ~/.config/antigravity-cli). Sign in with 'agy' first." >&2
+                        echo "Error: No Antigravity keyring token or credential files found (~/.gemini or ~/.gemini/antigravity-cli). Sign in with 'agy' first." >&2
                         exit 1
                       fi
 
                       printf '%s\n' "$slot" > "$slots_root/.active"
-                      chmod 600 "$slots_root/.active"
                       echo "Saved Antigravity credentials to slot '$slot'."
                       ;;
                     use)
@@ -204,23 +233,26 @@ _: {
                       fi
 
                       if [ -s "$slot_dir/keyring.token" ]; then
-                        secret-tool store --label="gemini (antigravity)" service gemini account antigravity < "$slot_dir/keyring.token"
+                        secret-tool store --label="gemini (antigravity)" service gemini username antigravity < "$slot_dir/keyring.token"
                       fi
 
                       for f in "''${auth_files[@]}"; do
                         if [ -f "$slot_dir/files/gemini/$f" ]; then
-                          mkdir -p -m 700 "$HOME/.gemini"
+                          mkdir -p "$HOME/.gemini"
                           install -m 600 "$slot_dir/files/gemini/$f" "$HOME/.gemini/$f"
+                        else
+                          rm -f "$HOME/.gemini/$f"
                         fi
                         if [ -f "$slot_dir/files/antigravity-cli/$f" ]; then
-                          mkdir -p -m 700 "$HOME/.config/antigravity-cli"
-                          install -m 600 "$slot_dir/files/antigravity-cli/$f" "$HOME/.config/antigravity-cli/$f"
+                          mkdir -p "$HOME/.gemini/antigravity-cli"
+                          install -m 600 "$slot_dir/files/antigravity-cli/$f" "$HOME/.gemini/antigravity-cli/$f"
+                        else
+                          rm -f "$HOME/.gemini/antigravity-cli/$f"
                         fi
                       done
 
-                      mkdir -p -m 700 "$slots_root"
+                      mkdir -p "$slots_root"
                       printf '%s\n' "$slot" > "$slots_root/.active"
-                      chmod 600 "$slots_root/.active"
                       echo "Switched active Antigravity account to slot '$slot'."
                       ;;
                     current)

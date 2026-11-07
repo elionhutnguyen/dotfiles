@@ -36,7 +36,7 @@ _: {
             enable = true;
             settings = {
               default_session = {
-                command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd ${lib.getExe' config.programs.niri.package "niri-session"}";
+                command = "${lib.getExe pkgs.tuigreet} --time --remember --remember-user-session --asterisks --cmd ${lib.getExe' config.programs.niri.package "niri-session"}";
                 user = "greeter";
               };
             };

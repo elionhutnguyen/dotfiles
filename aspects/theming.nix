@@ -16,7 +16,6 @@ in
             noto-fonts
             noto-fonts-cjk-sans
             noto-fonts-cjk-serif
-            noto-fonts-color-emoji
             nerd-fonts.jetbrains-mono
           ];
           fontconfig.defaultFonts = {
@@ -65,13 +64,9 @@ in
             colorscheme = "tokyonight-night";
           };
 
-          vcs = {
-            deltaTheme = "ansi";
-          };
+          vcs.deltaTheme = "ansi";
 
-          antigravity = {
-            colorScheme = "tokyo night";
-          };
+          antigravity.colorScheme = "tokyo night";
         };
 
         dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";

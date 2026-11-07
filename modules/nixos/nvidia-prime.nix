@@ -72,7 +72,6 @@ _: {
               finegrained = true;
             };
             inherit (cfg) open;
-            nvidiaSettings = true;
 
             prime = {
               offload = {

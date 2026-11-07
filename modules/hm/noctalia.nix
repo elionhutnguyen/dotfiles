@@ -76,9 +76,7 @@ _: {
               auto_locate = false;
               inherit (cfg) latitude longitude;
             };
-            nightlight = {
-              enabled = cfg.nightlightEnable;
-            };
+            nightlight.enabled = cfg.nightlightEnable;
             idle = {
               behavior_order = [
                 "lock"

@@ -20,6 +20,7 @@ _: {
     homeManager.my = {
       noctalia.enable = true;
       ghostty.enable = true;
+      yazi.enable = true;
       niri = {
         enable = true;
         shell = "noctalia";
