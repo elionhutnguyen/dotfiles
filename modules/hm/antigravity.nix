@@ -116,6 +116,10 @@ _: {
             "command(nixfmt)"
             "command(statix)"
             "command(deadnix)"
+            "command(python3)"
+            "command(pytest)"
+            "command(uv)"
+            "command(ruff)"
           ];
 
           settings = {
@@ -125,7 +129,7 @@ _: {
               enableTerminalSandbox
               toolPermission
               ;
-            allowNonWorkspaceAccess = true;
+            allowNonWorkspaceAccess = false;
             altScreenMode = "always";
             artifactReviewPolicy = "always-proceed";
             showTips = false;

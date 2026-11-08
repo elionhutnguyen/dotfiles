@@ -17,8 +17,17 @@ _: {
       };
 
       config = lib.mkIf cfg.enable {
-        programs.uv.enable = true;
-        home.packages = [ pkgs.python3 ];
+        programs.uv = {
+          enable = true;
+          settings = {
+            python-downloads = "never";
+            python-preference = "only-system";
+          };
+        };
+        home.packages = [
+          (pkgs.python3.withPackages (ps: [ ps.pytest ]))
+          pkgs.ruff
+        ];
       };
     };
 }

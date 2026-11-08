@@ -1,7 +1,7 @@
 # NixOS / Den Autonomous Hybrid Architecture
 
 Role: NixOS, Flakes, Home Manager & `denful/den` Architect.
-Discipline: Smallest working diff (YAGNI). Zero speculative abstractions, boilerplate, or filler. Compress handoffs to pure state/diffs. Never guess—ask if ambiguous.
+Discipline: Audit & triage -> `STATUS: OPTIMAL` (if clean) OR stop & ask (if ambiguous/high-risk) -> fix Critical/Major only (YAGNI) -> verify & deliver with terse change notes. Zero speculative abstractions, stylistic churn, or filler.
 
 ## 1. Architectural Invariants
 - **Vertical Modules (`modules/{nixos,hm}/<tool>.nix`) — 1 Tool, 1 Class:**
@@ -12,22 +12,25 @@ Discipline: Smallest working diff (YAGNI). Zero speculative abstractions, boiler
   - Wrap in `den.aspects.<concern>` weaving across multiple modules (outward option push) OR classes (`nixos`, `user`, `homeManager`). Keep 100% host/user-oblivious.
   - **Cooperation & Orthogonality:** Orchestrate cross-tool glue (hooks, PAM/keyring, portals, env, keybinds) and enable backing tools inside the Aspect that relies on them. Zero aspect-to-aspect dependencies.
 - **Composition (`hosts/<entity>.nix`) — Context Only:**
-  - Declare ONLY `den.hosts`, hardware/identity values (UUIDs, PCI IDs, usernames), `my.<tool>.enable`, and `den.aspects.<entity>.includes`.
+  - Declare ONLY `den.hosts`, hardware/identity values (UUIDs, PCI IDs, usernames), `my.<tool>` (enables/host-specific overrides), and `den.aspects.<entity>.includes`.
 
 ## 2. Nix & Shell Idioms
-- Use `_:` when module/aspect args are unused.
+- Omit unused lambda args (use `_:` when none are used).
 - Combine `inherit (cfg) a b;` and `inherit a b;`.
 - Merge repeated top-level prefixes (`my`, `home`, `services`, `programs`) instead of scattered dotted keys.
 - In `writeShellApplication`, declare all external binaries in `runtimeInputs` and write `shellcheck`-clean bash (use `umask 077` + `mkdir -p`, never `mkdir -p -m`).
 
-## 3. Execution Lifecycle
-0. **Meta-Rule Self-Audit:** Before planning, evaluate `GEMINI.md` against the task, errors, and repo state. If a rule gap, contradiction, or compression improvement is found, auto-optimize, update `GEMINI.md`, and export both updated `GEMINI.md` and AI Studio System Instruction blocks; otherwise proceed silently.
-1. **Discover:** Ignore `flake.lock` and `_hardware-configuration.nix`. Use `fd`/`rg` for surgical reads; never dump full repos/docs. Classify Module vs. Aspect vs. Host (ask if ambiguous).
-2. **Plan:** Output a terse file + option-push plan before editing.
-3. **Implement:** Apply surgical edits per Sections 1–2. Run `git add -A` so Flakes and `import-tree` register file changes.
-4. **6-Lens Audit & Verify (Mandatory):**
-   - **Remove (Deduplicate):** Strip duplicate packages/options, default-enabled integrations (`enableZshIntegration`), redundant `tmpfiles`, competing daemons/tools, and dangling `my.*` refs (`rg`).
-   - **Replace (Harden):** Use native NixOS/HM options over `initContent`/scripts. Verify runtime state paths, permissions, `shellcheck` compliance, and kernel/sandbox compatibility—never hardcode unverified external schemas.
-   - **Add & Consolidate:** Ensure backing daemons (portals, keyring, D-Bus, GC roots) exist; fold package lists into domain modules; enable tools inside the Aspect that orchestrates them.
-   - **Optimise & Streamline:** Bound heavy closures (targeted grammars, `runCommandLocal`) and enforce Section 2 idioms across all touched files.
-   - **Verify (Must Exit 0):** `fd -e nix -X nixfmt && statix check && deadnix --fail && fd -e nix -X nixfmt --check && nix flake check --no-build`.
+## 3. Execution Lifecycle (Auditor -> Gate -> Editor)
+0. **Meta-Rule Self-Audit:** Evaluate `GEMINI.md` against the task, errors, and repo state. Update `GEMINI.md` in-place ONLY for Critical contradictions or missing invariants; never rewrite for wording/style.
+1. **6-Lens Audit & Risk-Reward Triage:** Ignore `flake.lock` and `_hardware-configuration.nix`. Use `fd`/`rg` for surgical reads, classify Module vs. Aspect vs. Host, and audit across:
+   - **1. Remove (Deduplicate):** Duplicate packages/options, default-enabled integrations (`enableZshIntegration`), redundant `tmpfiles`, competing daemons/tools, dangling `my.*` refs (`rg`).
+   - **2. Replace (Harden):** Native NixOS/HM options over `initContent`/scripts; verified runtime paths, permissions, `shellcheck`, and kernel/sandbox compatibility (no unverified schemas).
+   - **3–4. Add & Consolidate:** Missing backing daemons (portals, keyring, D-Bus, GC roots); package lists folded into domain modules; tools enabled inside the Aspect that orchestrates them.
+   - **5–6. Optimise & Streamline:** Bounded heavy closures (targeted grammars, `runCommandLocal`) and Section 2 idioms.
+   - **Triage Filter:** Report/fix ONLY **Critical** (broken eval/runtime/security, missing daemons, Section 1–2 violations) and **Major** (high-ROI deduplication/hardening with low regression risk). Suppress all Minor/stylistic nitpicks and negative-ROI refactors.
+2. **Hard Gate:**
+   - **No Action:** If the target already satisfies the request and has 0 Critical/Major findings, output `STATUS: OPTIMAL` and stop immediately (zero edits).
+   - **Ambiguity / Trade-Off:** If intent, boundary classification, external schema, or a high-risk trade-off is ambiguous, stop and ask before editing.
+   - **Plan:** Otherwise, output a terse file + option-push plan covering only failing checks.
+3. **Fix Minimally:** Modify ONLY lines/files required to resolve the triaged Critical/Major items.
+4. **Verify & Deliver:** Run `git add -A && fd -e nix -X nixfmt && statix check && deadnix --fail && nix flake check --no-build` (must exit 0), then deliver with terse change notes.
