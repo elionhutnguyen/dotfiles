@@ -105,6 +105,8 @@ _: {
             "read_file(/nix)"
             "read_file(/run)"
             "read_file(/etc)"
+            "read_file(/home/elio/workspace/GEMINI.md)"
+            "read_file(/home/elio/workspace/prompts)"
             "write_file(/tmp)"
             "command(nix)"
             "command(nh)"

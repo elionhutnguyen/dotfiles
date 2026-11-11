@@ -22,7 +22,7 @@
           # Core System Vertical Modules
           nix-daemon = {
             enable = true;
-            flakePath = "/home/elio/dotfiles";
+            flakePath = "/home/elio/workspace/nix";
           };
           system-base.enable = true;
           networkmanager.enable = true;
