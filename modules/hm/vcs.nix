@@ -1,16 +1,15 @@
 # modules/hm/vcs.nix
-# Vertical Module: Git, Jujutsu, Delta, Difftastic, Lazygit & GH (100% user-oblivious options)
+# Vertical Module: Git, Jujutsu, Delta, Difftastic & GH (100% user-oblivious options)
 _: {
   den.default.homeManager =
     { config, lib, ... }:
     let
       cfg = config.my.vcs;
-      deltaExe = lib.getExe config.programs.delta.package;
       difftExe = lib.getExe config.programs.difftastic.package;
     in
     {
       options.my.vcs = {
-        enable = lib.mkEnableOption "colocated Git + Jujutsu VCS suite with Delta, Difftastic, Lazygit, and GH";
+        enable = lib.mkEnableOption "colocated Git + Jujutsu VCS suite with Delta, Difftastic, and GH";
 
         userName = lib.mkOption {
           type = lib.types.str;
@@ -215,30 +214,6 @@ _: {
                   "heads(::@- & bookmarks())"
                   "--to"
                   "@-"
-                ];
-              };
-            };
-          };
-
-          lazygit = {
-            enable = true;
-            settings = {
-              gui = {
-                nerdFontsVersion = "3";
-                showFileTree = true;
-                border = "rounded";
-              };
-              git = {
-                overrideGpg = true;
-                diffRenderers = [
-                  {
-                    colorArg = "always";
-                    command = "${deltaExe} --dark --paging=never";
-                  }
-                  {
-                    type = "extDiff";
-                    command = "${difftExe} --color=always";
-                  }
                 ];
               };
             };

@@ -24,7 +24,7 @@ _: {
 
         theme = lib.mkOption {
           type = lib.types.str;
-          default = "TokyoNight Night";
+          default = "light:TokyoNight Day,dark:TokyoNight Moon";
           description = "Color theme name for Ghostty.";
         };
       };

@@ -23,4 +23,6 @@
       den.batteries.host-aspects
     ];
   };
+
+  den.schema.host.includes = [ den.batteries.user-aspects ];
 }

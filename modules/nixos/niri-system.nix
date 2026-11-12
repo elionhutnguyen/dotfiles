@@ -53,14 +53,7 @@ _: {
           TTYVTDisallocate = true;
         };
 
-        xdg.portal = {
-          enable = true;
-          extraPortals = [
-            pkgs.xdg-desktop-portal-gtk
-            pkgs.xdg-desktop-portal-gnome
-          ];
-          config.niri."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
-        };
+        xdg.portal.config.niri."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
       };
     };
 }

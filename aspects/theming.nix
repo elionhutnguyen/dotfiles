@@ -43,38 +43,33 @@ in
           noctalia = {
             fontFamily = "Noto Sans";
             theme = "Tokyo-Night";
+            themeMode = "auto";
           };
 
           cli-tools.btopTheme = "tokyo-night";
 
           niri = {
-            activeBorderColor = "#7aa2f7";
-            inactiveBorderColor = "#24283b";
+            activeBorderColor = "#2e7de9";
+            inactiveBorderColor = "#6183bb";
           };
 
           ghostty = {
             fontFamily = monoFont;
             inherit fontSize;
-            theme = "TokyoNight Night";
+            theme = "light:TokyoNight Day,dark:TokyoNight Moon";
           };
 
-          neovim = {
-            fontFamily = monoFont;
-            inherit fontSize;
-            colorscheme = "tokyonight-night";
-          };
+          neovim.colorscheme = "tokyonight";
 
           vcs.deltaTheme = "ansi";
 
           antigravity.colorScheme = "tokyo night";
         };
 
-        dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-
         gtk = {
           enable = true;
           theme = {
-            name = "Adwaita-dark";
+            name = "Adwaita";
             package = pkgs.gnome-themes-extra;
           };
         };
@@ -82,7 +77,7 @@ in
         qt = {
           enable = true;
           platformTheme.name = "gtk3";
-          style.name = "adwaita-dark";
+          style.name = "adwaita";
         };
 
         home.pointerCursor = {

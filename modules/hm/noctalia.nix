@@ -22,6 +22,16 @@ _: {
           description = "Built-in Noctalia color palette name.";
         };
 
+        themeMode = lib.mkOption {
+          type = lib.types.enum [
+            "auto"
+            "dark"
+            "light"
+          ];
+          default = "auto";
+          description = "Theme mode (`auto` switches between light and dark based on sunrise/sunset schedule).";
+        };
+
         nightlightEnable = lib.mkOption {
           type = lib.types.bool;
           default = true;
@@ -67,7 +77,7 @@ _: {
               launch_apps_as_systemd_services = true;
             };
             theme = {
-              mode = "dark";
+              mode = cfg.themeMode;
               source = "builtin";
               builtin = cfg.theme;
               sync_color_scheme = true;

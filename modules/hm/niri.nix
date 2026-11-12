@@ -128,11 +128,11 @@ _: {
             XF86AudioMute        allow-when-locked=true { spawn "${cfg.shell}" "msg" "volume-mute"; }
             XF86AudioMicMute     allow-when-locked=true { spawn "${cfg.shell}" "msg" "mic-mute"; }
 
-            XF86AudioPlay        allow-when-locked=true { spawn "playerctl" "play-pause"; }
-            XF86AudioPause       allow-when-locked=true { spawn "playerctl" "play-pause"; }
-            XF86AudioStop        allow-when-locked=true { spawn "playerctl" "stop"; }
-            XF86AudioPrev        allow-when-locked=true { spawn "playerctl" "previous"; }
-            XF86AudioNext        allow-when-locked=true { spawn "playerctl" "next"; }
+            XF86AudioPlay        allow-when-locked=true { spawn "${lib.getExe pkgs.playerctl}" "play-pause"; }
+            XF86AudioPause       allow-when-locked=true { spawn "${lib.getExe pkgs.playerctl}" "play-pause"; }
+            XF86AudioStop        allow-when-locked=true { spawn "${lib.getExe pkgs.playerctl}" "stop"; }
+            XF86AudioPrev        allow-when-locked=true { spawn "${lib.getExe pkgs.playerctl}" "previous"; }
+            XF86AudioNext        allow-when-locked=true { spawn "${lib.getExe pkgs.playerctl}" "next"; }
 
             XF86MonBrightnessUp   allow-when-locked=true { spawn "${cfg.shell}" "msg" "brightness-up"; }
             XF86MonBrightnessDown allow-when-locked=true { spawn "${cfg.shell}" "msg" "brightness-down"; }
@@ -252,13 +252,13 @@ _: {
 
         activeBorderColor = lib.mkOption {
           type = lib.types.str;
-          default = "#7aa2f7";
+          default = "#2e7de9";
           description = "Hex color for active window focus ring.";
         };
 
         inactiveBorderColor = lib.mkOption {
           type = lib.types.str;
-          default = "#24283b";
+          default = "#6183bb";
           description = "Hex color for inactive window focus ring.";
         };
 

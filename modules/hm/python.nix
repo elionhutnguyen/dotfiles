@@ -25,7 +25,17 @@ _: {
           };
         };
         home.packages = [
-          (pkgs.python3.withPackages (ps: [ ps.pytest ]))
+          (pkgs.python3.withPackages (
+            ps: with ps; [
+              pytest
+              numpy
+              pandas
+              scipy
+              scikit-learn
+              opencv4
+            ]
+          ))
+          pkgs.basedpyright
           pkgs.ruff
         ];
       };
