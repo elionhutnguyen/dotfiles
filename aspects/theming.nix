@@ -1,5 +1,5 @@
 # aspects/theming.nix
-# Horizontal Aspect: Cross-cutting typography & TokyoNight palette pushed outward to oblivious modules
+# Aspect: Cross-cutting typography & Catppuccin palette across system and user applications
 _:
 let
   monoFont = "JetBrainsMono Nerd Font";
@@ -35,35 +35,32 @@ in
         };
       };
 
-    # Outward Push: Configure local options of oblivious vertical HM modules
     homeManager =
       { pkgs, ... }:
       {
-        my = {
-          noctalia = {
-            fontFamily = "Noto Sans";
-            theme = "Tokyo-Night";
-            themeMode = "auto";
+        programs = {
+          noctalia.settings = {
+            shell.font_family = "Noto Sans";
+            theme = {
+              mode = "auto";
+              source = "builtin";
+              builtin = "Catppuccin";
+              sync_color_scheme = true;
+            };
           };
 
-          cli-tools.btopTheme = "tokyo-night";
+          btop.settings.color_theme = "TTY";
 
-          niri = {
-            activeBorderColor = "#2e7de9";
-            inactiveBorderColor = "#6183bb";
+          ghostty.settings = {
+            font-family = monoFont;
+            font-size = fontSize;
+            theme = "light:Catppuccin Latte,dark:Catppuccin Mocha";
+            minimum-contrast = 3.5;
           };
 
-          ghostty = {
-            fontFamily = monoFont;
-            inherit fontSize;
-            theme = "light:TokyoNight Day,dark:TokyoNight Moon";
-          };
+          delta.options.syntax-theme = "ansi";
 
-          neovim.colorscheme = "tokyonight";
-
-          vcs.deltaTheme = "ansi";
-
-          antigravity.colorScheme = "tokyo night";
+          antigravity-cli.settings.colorScheme = "terminal";
         };
 
         gtk = {

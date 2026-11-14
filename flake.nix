@@ -1,5 +1,5 @@
 {
-  description = "Elio Flake Configuration (Strict Autonomous Hybrid Module + Aspect Architecture)";
+  description = "Elio Flake Configuration (Pure Den Aspect Architecture)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -20,9 +20,9 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.den.flakeModule
-        (inputs.import-tree ./modules)
         (inputs.import-tree ./aspects)
         (inputs.import-tree ./hosts)
+        (inputs.import-tree ./users)
       ];
     };
 }

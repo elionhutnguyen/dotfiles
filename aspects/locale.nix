@@ -1,5 +1,5 @@
 # aspects/locale.nix
-# Horizontal Aspect: Cross-class localization, CJK/Vietnamese input method & Taipei solar coordinates
+# Aspect: Cross-class localization, CJK/Vietnamese input method & Taipei solar coordinates
 _:
 let
   defaultLocale = "en_GB.UTF-8";
@@ -45,19 +45,15 @@ in
         };
       };
 
-    # Outward Push: Configure solar coordinates in `noctalia` and IME startup in `niri`
-    homeManager.my = {
-      noctalia = {
-        nightlightEnable = true;
-        latitude = 25.03;
-        longitude = 121.56;
+    homeManager = {
+      programs.noctalia.settings = {
+        location = {
+          auto_locate = false;
+          latitude = 25.03;
+          longitude = 121.56;
+        };
+        nightlight.enabled = true;
       };
-      niri.spawnAtStartup = [
-        [
-          "fcitx5"
-          "-d"
-        ]
-      ];
     };
   };
 }

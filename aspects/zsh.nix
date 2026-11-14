@@ -1,33 +1,37 @@
-# modules/hm/zsh.nix
-# Vertical Module: User-level Zsh shell with fzf-tab, Atuin, Zoxide, and Starship
+# aspects/zsh.nix
+# Aspect: Multi-class Zsh shell (system registration, login shell & HM fzf-tab/Atuin/Zoxide/Starship)
 _: {
-  den.default.homeManager =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      cfg = config.my.zsh;
-    in
-    {
-      options.my.zsh = {
-        enable = lib.mkEnableOption "declarative Zsh shell with fzf-tab, Atuin, Zoxide, and Starship";
+  den.aspects.zsh = {
+    nixos = {
+      programs.zsh.enable = true;
+      environment.pathsToLink = [ "/share/zsh" ];
+    };
 
-        historySize = lib.mkOption {
-          type = lib.types.int;
-          default = 100000;
-          description = "Maximum number of history entries retained by Zsh.";
-        };
+    user =
+      { pkgs, ... }:
+      {
+        shell = pkgs.zsh;
       };
 
-      config = lib.mkIf cfg.enable {
+    homeManager =
+      {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+      {
         programs = {
           zsh = {
             enable = true;
             dotDir = "${config.xdg.configHome}/zsh";
             defaultKeymap = "emacs";
+
+            shellAliases = {
+              hotspot-on = "nmcli device wifi hotspot";
+              hotspot-off = "nmcli connection down Hotspot";
+              hotspot-qr = "nmcli device wifi show-password";
+            };
 
             autosuggestion = {
               enable = true;
@@ -41,8 +45,8 @@ _: {
 
             history = {
               path = "${config.xdg.stateHome}/zsh/history";
-              size = cfg.historySize;
-              save = cfg.historySize;
+              size = 100000;
+              save = 100000;
               extended = true;
               expireDuplicatesFirst = true;
               ignoreAllDups = true;
@@ -142,5 +146,5 @@ _: {
           };
         };
       };
-    };
+  };
 }

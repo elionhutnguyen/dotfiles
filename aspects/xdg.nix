@@ -1,12 +1,7 @@
 # aspects/xdg.nix
-# Horizontal Aspect: Cross-class XDG directory hygiene without breaking Wine, GTK, wget, or Trash
+# Aspect: User XDG directory hygiene without breaking Wine, GTK, wget, or Trash
 _: {
   den.aspects.xdg = {
-    # Outward Push: Configure local XDG option of the vertical `nix-daemon` module
-    nixos = {
-      my.nix-daemon.useXdgDirectories = true;
-    };
-
     homeManager =
       { config, ... }:
       let
